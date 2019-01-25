@@ -1,0 +1,24 @@
+# Build Docker image using Azure Pipelines
+# Target: Azure Container Registry (ACR)
+
+# source branch trigger  : RepositoryNookis logging to Azure Application Insights 
+trigger:
+- AppInsights
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables:
+  buildConfiguration: 'Release'
+  imageName: 'repositorynook:latest'   # commented, was:   $(build.buildId)
+  servicePrincipal: '1c790620-e74b-45a9-b5c6-5ee26aec9a32'
+  servicePrincipalPassword: 'c6910be9-1dba-4ae2-917c-18a94b42fe01'
+
+steps:
+- script:  |
+    docker build -f ./CCA.Services.RepositoryNook/Dockerfile -t nooksandcrannies.azurecr.io/$(imageName) .
+- script:  |
+    docker login -u marty@martymazurik.com -p Gb##qw04 mtmazurik/lognook
+    docker login --username=mtmazurik --email=marty@martymazurik.com
+    docker push mtmazurik/lognook:latest
+

@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7631C5BC-B886-4703-82EF-85269AB4C4AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCA.Services.RepositoryNook", "CCA.Services.repositorynook\CCA.Services.RepositoryNook.csproj", "{49F7CCCB-B3E7-4E6C-86DD-8E197F8D958F}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AWS", "AWS", "{8FA679D9-F47E-4CD6-824C-4EE078E43D0F}"
+	ProjectSection(SolutionItems) = preProject
+		CCA.Services.repositorynook\aws-ecs-tools-defaults.json = CCA.Services.repositorynook\aws-ecs-tools-defaults.json
+		AWS\aws.env = AWS\aws.env
+		AWS\repositorynook-task-definition.json = AWS\repositorynook-task-definition.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{1EF72A7B-9CA8-4513-9287-927EC4F39DCA}"
+	ProjectSection(SolutionItems) = preProject
+		Azure\azure-deploy.ps1 = Azure\azure-deploy.ps1
+		Azure\azure-deploy.sh = Azure\azure-deploy.sh
+		azure-pipelines.yml = azure-pipelines.yml
+		Azure\azure-resmgr-template.json = Azure\azure-resmgr-template.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49F7CCCB-B3E7-4E6C-86DD-8E197F8D958F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F7CCCB-B3E7-4E6C-86DD-8E197F8D958F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F7CCCB-B3E7-4E6C-86DD-8E197F8D958F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F7CCCB-B3E7-4E6C-86DD-8E197F8D958F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8FA679D9-F47E-4CD6-824C-4EE078E43D0F} = {7631C5BC-B886-4703-82EF-85269AB4C4AA}
+		{1EF72A7B-9CA8-4513-9287-927EC4F39DCA} = {7631C5BC-B886-4703-82EF-85269AB4C4AA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D53D694-24EE-433B-897E-C6FE3F8F8FEC}
+	EndGlobalSection
+EndGlobal

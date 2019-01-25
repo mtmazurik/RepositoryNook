@@ -1,0 +1,43 @@
+# Variables (if using, instead of hardcoding, use $AKV_NAME   for instance) 
+# Azure Resource Group
+RES_GROUP = lognookcontainers
+# Azure Key Vault
+AKV_NAME = containerskeyvault
+# Azure Container Registry
+ACR_NAME = nooksandcrannies
+
+#security principal and keyvault - hardcoded for now, to manually enter lines of code in AZ Cloud Shell
+
+#principal password
+# Create service principal, store its password in AKV (the registry *password*)
+az keyvault secret set --vault-name containerskeyvault --name nooksandcrannies-pull-pwd --value $(az ad sp create-for-rbac --name $nooksandcrannies-pull \
+				--scopes $(az acr show --name nooksandcrannies --query id --output tsv) \
+                --role reader \
+                --query password \
+                --output tsv)
+#principalId (username)
+az keyvault secret set --vault-name containerskeyvault --name nooksandcrannies-pull-usr --value $(az ad sp show --id http://nooksandcrannies-pull --query appId --output tsv)
+
+# see https://docs.microsoft.com/en-us/azure/container-instances/container-instances-using-azure-container-registry   to fix above script
+
+values already entered by devops-handy repo,   ACR-set-service-principal.ps1 powershell script come out
+id:  1c790620-e74b-45a9-b5c6-5ee26aec9a32
+pwd: c6910be9-1dba-4ae2-917c-18a94b42fe01
+
+
+
+#container group
+az group create --name LogNookContainers --location westus
+
+
+#container
+az container create --name lognook \
+					--resource-group LogNookContainers \
+					--image nooksandcrannies.azurecr.io/lognook:latest \
+					--registry-username 1c790620-e74b-45a9-b5c6-5ee26aec9a32
+					--registry-password c6910be9-1dba-4ae2-917c-18a94b42fe01
+					--ports 8901 --ip-address public \
+					--dns-name-label lognook-1234 \
+					--query ipAddress.fqdn
+
+az container show --resource-group LogNookContainers --name LogNook --query "{FQDN:ipAddress.fqdn,ProvisioningState:provisioningState}" --out table

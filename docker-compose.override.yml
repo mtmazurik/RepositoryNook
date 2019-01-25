@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  lognook:
+    image: mtmazurik/repositorynook
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8902:80"

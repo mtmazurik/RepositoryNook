@@ -1,0 +1,27 @@
+
+{
+    "region" : "us-west-2",
+    "profile" : "MTMAZURIK-PROFILE",
+    "configuration" : "Release",
+    "tag"           : "lognook:latest",
+    "docker-build-working-dir" : "",
+    "cluster"                  : "lognook-cluster",
+    "launch-type"              : "FARGATE",
+    "launch-subnets"           : "subnet-070d29f2c747e3d5c",
+    "launch-security-groups"   : "sg-0d13e250ecf8cbfec",
+    "assign-public-ip"         : true,
+    "task-definition-name"     : "lognook",
+    "task-cpu"                 : "1024",
+    "task-memory"              : "2048",
+    "task-definition-task-role" : "arn:aws:iam::255373080893:role/ecs_execution_lognook-0",
+    "task-execution-role"       : "ecsTaskExecutionRole",
+    "container-name"            : "lognook-api",
+    "container-port-mapping"    : "80:80",
+    "container-environment-variables" : "\"ASPNETCORE_ENVIRONMENT\"=\"Production\"",
+    "skip-image-push"                 : false,
+    "cluster-service"                 : "lognook-api",
+    "desired-count"                   : 1,
+    "deployment-minimum-healthy-percent" : 50,
+    "deployment-maximum-percent"         : 200,
+    "vstoolkit-deployment-mode"          : "DeployService"
+}
