@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://cloudcomputingassocates.com/address.schema.json",
+  "title": "address",
+  "description": "A typical US address layout",
+  "type": "object",
+  "properties": {
+    "address1" : {
+      "description" : "address line 1",
+      "type": "string"
+    },
+    "address2" : {
+      "description" : "address line 2",
+      "type": "string"
+    },
+    "city" : {
+      "description" : "city",
+      "type": "string"
+    },
+    "state" : {
+      "description" : "city",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2
+    },
+    "zip" : {
+      "description" : "city",
+      "type": "string",
+      "pattern": "^[0-9]{5}(?:-[0-9]{4})?$"
+    },
+    "required": ["address1", "city", "state", "zip"]
+  }
+}

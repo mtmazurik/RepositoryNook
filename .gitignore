@@ -42,3 +42,4 @@
 /CCA.Services.LogNook/bin/Release/netcoreapp2.2
 /bin/Release/cca.services.lognook.dll
 /bin/Release/cca.services.lognook.pdb
+/CCA.Services.RepositoryNook/obj/Debug/netcoreapp2.2
