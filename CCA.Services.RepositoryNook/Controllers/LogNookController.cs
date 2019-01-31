@@ -15,7 +15,15 @@ namespace CCA.Services.RepositoryNook.Controllers
     [Route("/")]
     public class RepositoryNookController : Controller
     {
-        [HttpPut("kill")]   // Kills the main thread, effectively shutting it down (todo:  rearchect a "restart", by creating the service code on its own thread, leaving the API /Controller running)
+        [HttpPost("")]
+        [AllowAnonymous]    // no Auth needed 
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        public IActionResult CreateRepositoryObject([FromServices]IRepositoryNookService service, [FromBody]RepositoryNookModel nookObject)
+        {
+            service.Create(nookObject);
+            return ResultFormatter.ResponseOK("");
+        }
+        [HttpPut("kill")]   // Kills the main thread, effectively shutting it down
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         public IActionResult Kill([FromServices]IRepositoryNookService service)
         {

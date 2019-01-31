@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://cloudcomputingassocates.com/RepositoryNook.schema.json",
+  "title": "repository-object",
+  "type": "object",
+  "properties": {
+    "app": {
+      "type": "string"
+    },
+    "creator": {
+      "type": "string"
+    },
+    "creationDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "modificationDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "tags": {
+      "type": "array"
+    },
+    "data": {
+      "type": "object"
+    }
+  }
+}
