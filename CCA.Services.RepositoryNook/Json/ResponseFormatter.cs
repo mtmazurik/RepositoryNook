@@ -1,5 +1,6 @@
 ﻿using CCA.Services.RepositoryNook.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CCA.Services.RepositoryNook.JsonHelpers
 {
-    public static class ResultFormatter
+    public static class ResponseFormatter
     {
         public static JsonResult ResponseOK(JProperty property)
         {
@@ -24,6 +25,16 @@ namespace CCA.Services.RepositoryNook.JsonHelpers
         {
             Response response = new Response();
             response.Meta.Add("Message", stringResponse);
+            JsonResult result = new JsonResult(response)
+            {
+                StatusCode = 200
+            };
+            return result;
+        }
+        public static JsonResult ResponseOK(Repository repoObject, string descr="Success" )
+        {
+            Response response = new Response(repoObject);
+            response.Meta.Add("Message", descr);
             JsonResult result = new JsonResult(response)
             {
                 StatusCode = 200

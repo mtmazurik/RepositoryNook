@@ -10,6 +10,6 @@ namespace CCA.Services.RepositoryNook.Service
     public interface IRepositoryNookService
     {
         string kill();
-        void Create(RepositoryNookModel nookObject);
+        Repository Create(Repository repoObject);
     }
 }

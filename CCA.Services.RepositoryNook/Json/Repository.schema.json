@@ -1,0 +1,159 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://cloudcomputingassociates.com/schemas/Repository.schema.json",
+  "type": "object",
+  "title": "Repository",
+  "required": [
+    "_id",
+    "primaryIndex",
+    "app",
+    "schemaName",
+    "schemaUri",
+    "type",
+    "data"
+  ],
+  "properties": {
+    "_id": {
+      "$id": "#/properties/_id",
+      "type": "null",
+      "title": "The _id Schema",
+      "default": null,
+      "examples": [
+        null
+      ]
+    },
+    "primaryIndex": {
+      "$id": "#/properties/primaryIndex",
+      "type": "string",
+      "title": "The Primaryindex Schema",
+      "default": "",
+      "examples": [
+        "580"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "secondaryIndex": {
+      "$id": "#/properties/secondaryIndex",
+      "type": "string",
+      "title": "The Secondaryindex Schema",
+      "default": "",
+      "examples": [
+        "Monday"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "tertiaryIndex": {
+      "$id": "#/properties/tertiaryIndex",
+      "type": "null",
+      "title": "The Tertiaryindex Schema",
+      "default": null,
+      "examples": [
+        null
+      ]
+    },
+    "tags": {
+      "$id": "#/properties/tags",
+      "type": "array",
+      "title": "The Tags Schema",
+      "items": {
+        "$id": "#/properties/tags/items",
+        "type": "string",
+        "title": "The Items Schema",
+        "default": "",
+        "examples": [
+          "777x",
+          "Boeing"
+        ],
+        "pattern": "^(.*)$"
+      }
+    },
+    "createdDate": {
+      "$id": "#/properties/createdDate",
+      "type": "null",
+      "title": "The Createddate Schema",
+      "default": null,
+      "examples": [
+        null
+      ]
+    },
+    "createdBy": {
+      "$id": "#/properties/createdBy",
+      "type": "string",
+      "title": "The Createdby Schema",
+      "default": "",
+      "examples": [
+        "mtmazurik"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "modifiedDate": {
+      "$id": "#/properties/modifiedDate",
+      "type": "null",
+      "title": "The Modifieddate Schema",
+      "default": null,
+      "examples": [
+        null
+      ]
+    },
+    "modifiedBy": {
+      "$id": "#/properties/modifiedBy",
+      "type": "null",
+      "title": "The Modifiedby Schema",
+      "default": null,
+      "examples": [
+        null
+      ]
+    },
+    "app": {
+      "$id": "#/properties/app",
+      "type": "string",
+      "title": "The App Schema",
+      "default": "",
+      "examples": [
+        "FlightBook"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "schemaName": {
+      "$id": "#/properties/objectSchemaName",
+      "type": "string",
+      "title": "The Objectschemaname Schema",
+      "default": "",
+      "examples": [
+        "TicketingData"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "schemaUri": {
+      "$id": "#/properties/objectSchemaUri",
+      "type": "string",
+      "title": "The Objectschemauri Schema",
+      "default": "",
+      "examples": [
+        "http://cloudcomputingassociates/schemas/TicketingData.json.schema"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "type": {
+      "$id": "#/properties/objectType",
+      "type": "string",
+      "title": "The Objecttype Schema",
+      "default": "",
+      "examples": [
+        "data-object"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "data": {
+      "$id": "#/properties/objectData",
+      "type": "string",
+      "title": "The Objectdata Schema",
+      "default": "",
+      "examples": [
+        "{ \"ticketingData\" : { \"flightNumber\" : \"580\", \"dayOfWeek\" : \"Monday\",\"manufacturer\":\"Boeing\", \"planeType\":\"777x\" }}"
+      ],
+      "pattern": "^(.*)$"
+    }
+  }
+}

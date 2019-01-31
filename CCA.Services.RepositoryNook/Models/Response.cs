@@ -14,10 +14,11 @@ namespace CCA.Services.RepositoryNook.Models
         public Response()           // ctor
         {
             _meta = new Dictionary<string, string>();
-            _data = new JArray();
+            _data = new JObject();
         }
         public Response(Object poco)    // plain old c# class serialized down the pipe by controller binding
         {
+            _meta = new Dictionary<string, string>();
             _data = poco;
         }
         public Response(string key, string value)
@@ -26,10 +27,10 @@ namespace CCA.Services.RepositoryNook.Models
             _data = new JArray();
             _data = new JObject(new JProperty(key, value));
         }
-        public Response(JArray jarray)
+        public Response(JObject jObject)
         {
             _meta = new Dictionary<string, string>();
-            _data = jarray;
+            _data = jObject;
         }
 
         public Dictionary<string,string> Meta {  get { return _meta; } }

@@ -12,7 +12,7 @@ namespace CCA.Services.RepositoryNook.Service
     public class RepositoryNookService : IRepositoryNookService
     {
         private IApplicationLifetime _applicationLifetime;
-        //private readonly IMongoCollection<RepositoryNookModel> _repository;
+        //private readonly IMongoCollection<RepositoryModel> _repository;
 
         public RepositoryNookService(IApplicationLifetime applicationLifetime)     // ctor
         {
@@ -24,47 +24,48 @@ namespace CCA.Services.RepositoryNook.Service
             _applicationLifetime.StopApplication();
             return "RepositoryNook service stopped.";
         }
-        public void Create(RepositoryNookModel nookObject)
+        public Repository Create(Repository repoObject)
         {
             var client = new MongoClient("mongodb+srv://nook-service:Passw0rd!@mongo-db-cluster-sdzbh.mongodb.net/");
             var database = client.GetDatabase("repository-nook-db");
-            IMongoCollection<RepositoryNookModel> repository = database.GetCollection<RepositoryNookModel>("repository");
+            IMongoCollection<Repository> collection = database.GetCollection<Repository>("repository");
 
-            if (nookObject._id == null)                         // user can send in a unique identifier, else we generate a guid
+            if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a guid
             { 
-                nookObject._id = ObjectId.GenerateNewId();
+                repoObject._id = ObjectId.GenerateNewId();
             }
-            if (nookObject.createdDate == DateTime.MinValue)   // user can send in a creation date, else we insert now()
+            if (repoObject.createdDate == DateTime.MinValue)   // user can send in a creation date, else we insert now()
             { 
-                nookObject.createdDate = DateTime.Now;
+                repoObject.createdDate = DateTime.Now;
             }
 
-            CreateIndices(repository, nookObject);
+            CreateIndices(collection, repoObject);
 
-            repository.InsertOne(nookObject);
+            collection.InsertOne(repoObject);
+            return repoObject;
         }
-        void CreateIndices(IMongoCollection<RepositoryNookModel> repository, RepositoryNookModel nookObject)
+        void CreateIndices(IMongoCollection<Repository> collection, Repository repoObject)
         {
             // TO-DO: implement check for number of indices, although they are indempotent , reduce the call overhead,   if indices.count >=  3  we've created them, so exit rtn
 
-            var repositoryNookModelBuilder = Builders<RepositoryNookModel>.IndexKeys;
+            var RepositoryModelBuilder = Builders<Repository>.IndexKeys;
 
                                                                 // primary index must be supplied, not necessarily unique
-            var primaryIndexModel = new CreateIndexModel<RepositoryNookModel>(repositoryNookModelBuilder.Ascending(i => i.primaryIndex)
+            var primaryIndexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.primaryIndex)
                         , new CreateIndexOptions() { Name = "primaryIndex" });
-            repository.Indexes.CreateOne(primaryIndexModel);
+            collection.Indexes.CreateOne(primaryIndexModel);
 
-            if (nookObject.secondaryIndex != null)  // because optional:   as soon as once is provided we create index for it
+            if (repoObject.secondaryIndex != null)  // because optional:   as soon as once is provided we create index for it
             {
-                var indexModel = new CreateIndexModel<RepositoryNookModel>(repositoryNookModelBuilder.Ascending(i => i.secondaryIndex)
+                var indexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.secondaryIndex)
                                         , new CreateIndexOptions() { Name = "secondaryIndex" });
-                repository.Indexes.CreateOne(indexModel);
+                collection.Indexes.CreateOne(indexModel);
             }
-            if (nookObject.tertiaryIndex != null)  // because optional:   create index, if supplied
+            if (repoObject.tertiaryIndex != null)  // because optional:   create index, if supplied
             {
-                var indexModel = new CreateIndexModel<RepositoryNookModel>(repositoryNookModelBuilder.Ascending(i => i.tertiaryIndex)
+                var indexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.tertiaryIndex)
                                         , new CreateIndexOptions() { Name = "tertiaryIndex" });
-                repository.Indexes.CreateOne(indexModel);
+                collection.Indexes.CreateOne(indexModel);
             }
 
         }
