@@ -35,19 +35,18 @@ namespace CCA.Services.RepositoryNook.Services
                 schemaRegistry.createdDate = DateTime.Now;
             }
 
-            CreateSchemaNameIndex(srCollection);
+            CreateSchemaNameIndex(srCollection);                  // primary index is schema name, must be unique
 
             srCollection.InsertOne(schemaRegistry);
+
             return schemaRegistry;
         }
         private void CreateSchemaNameIndex(IMongoCollection<SchemaRegistry> collection)
         {
                 var modelBuilder = Builders<SchemaRegistry>.IndexKeys;
+                var indexModel = new CreateIndexModel<SchemaRegistry>(modelBuilder.Ascending(i => i.schemaName), new CreateIndexOptions() { Name = "PK_schemaName", Unique = true });
 
-                // primary index is schema name, must be unique
-                var indexModel = new CreateIndexModel<SchemaRegistry>(modelBuilder.Ascending(i => i.schemaName)
-                            , new CreateIndexOptions() { Name = "schemaNameIndex", Unique = true });
-                collection.Indexes.CreateOne(indexModel);
+                collection.Indexes.CreateOne(indexModel);       //indempotent
             }
     }
 }

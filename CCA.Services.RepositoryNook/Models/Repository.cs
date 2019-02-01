@@ -12,12 +12,8 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonElement("_id")]
         public object _id { get; set; }
         [BsonRequired]
-        [BsonElement("primaryIndex")]
-        public string primaryIndex { get; set; }
-        [BsonElement("secondaryIndex")]
-        public string secondaryIndex { get; set; }
-        [BsonElement("tertiaryIndex")]
-        public string tertiaryIndex { get; set; }
+        [BsonElement("key")]
+        public string key { get; set; }
         [BsonElement("tags")]
         public List<string> tags { get; set; }
         [BsonElement("createdDate")]
@@ -30,13 +26,15 @@ namespace CCA.Services.RepositoryNook.Models
         public string modifiedBy { get; set; }
         [BsonElement("app")]
         public string app { get; set; }
+        [BsonElement("repository")]
+        public string repository { get; set; }
+        [BsonElement("collection")]
+        public string collection { get; set; }
         [BsonElement("schemaName")]
         public string schemaName { get; set; }
         [BsonElement("schemaUri")]
-        public string schemUri { get; set; }
-        [BsonElement("type")]
-        public string objectType { get; set; }
-        [BsonElement("data")]
-        public string objectData { get; set; }
+        public string schemaUri { get; set; }
+        [BsonElement("body")]
+        public string body { get; set; }
     }
 }

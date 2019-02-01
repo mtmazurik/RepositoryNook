@@ -24,33 +24,14 @@
       ]
     },
     "primaryIndex": {
-      "$id": "#/properties/primaryIndex",
+      "$id": "#/properties/key",
       "type": "string",
-      "title": "The Primaryindex Schema",
+      "title": "The key Schema",
       "default": "",
       "examples": [
         "580"
       ],
       "pattern": "^(.*)$"
-    },
-    "secondaryIndex": {
-      "$id": "#/properties/secondaryIndex",
-      "type": "string",
-      "title": "The Secondaryindex Schema",
-      "default": "",
-      "examples": [
-        "Monday"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "tertiaryIndex": {
-      "$id": "#/properties/tertiaryIndex",
-      "type": "null",
-      "title": "The Tertiaryindex Schema",
-      "default": null,
-      "examples": [
-        null
-      ]
     },
     "tags": {
       "$id": "#/properties/tags",
@@ -115,6 +96,26 @@
       ],
       "pattern": "^(.*)$"
     },
+    "repository": {
+      "$id": "#/properties/repository",
+      "type": "string",
+      "title": "The Repository Schema",
+      "default": "",
+      "examples": [
+        "repository-nook-db"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "collection": {
+      "$id": "#/properties/collection",
+      "type": "string",
+      "title": "The Collection Schema",
+      "default": "",
+      "examples": [
+        "flights"
+      ],
+      "pattern": "^(.*)$"
+    },
     "schemaName": {
       "$id": "#/properties/schemaName",
       "type": "string",
@@ -132,16 +133,6 @@
       "default": "",
       "examples": [
         "http://cloudcomputingassociates/schemas/TicketingData.json.schema"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "type": {
-      "$id": "#/properties/type",
-      "type": "string",
-      "title": "The type Schema",
-      "default": "",
-      "examples": [
-        "data-object"
       ],
       "pattern": "^(.*)$"
     },

@@ -47,13 +47,13 @@ namespace CCA.Services.RepositoryNook.Services
         {
             var RepositoryModelBuilder = Builders<Repository>.IndexKeys;
 
-            var primaryIndexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.primaryIndex), new CreateIndexOptions() { Name = "primaryIndex" });
+            var primaryIndexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.primaryIndex), new CreateIndexOptions() { Name = "IX_primaryIndex" });
             collection.Indexes.CreateOne(primaryIndexModel);
 
-            var indexModel2 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.secondaryIndex), new CreateIndexOptions() { Name = "secondaryIndex" });
+            var indexModel2 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.secondaryIndex), new CreateIndexOptions() { Name = "IX_secondaryIndex" });
             collection.Indexes.CreateOne(indexModel2);
 
-            var indexModel3 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.tertiaryIndex), new CreateIndexOptions() { Name = "tertiaryIndex" });
+            var indexModel3 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.tertiaryIndex), new CreateIndexOptions() { Name = "IX_tertiaryIndex" });
             collection.Indexes.CreateOne(indexModel3);
         }
 
