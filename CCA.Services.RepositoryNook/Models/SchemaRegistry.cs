@@ -11,8 +11,6 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonRequired]
         [BsonElement("_id")]
         public object _id { get; set; }
-        [BsonElement("schemaOrg")]
-        public string schemaOrg { get; set; }
         [BsonElement("schemaUri")]
         public string schemaUri { get; set; }
         [BsonElement("schemaName")]
