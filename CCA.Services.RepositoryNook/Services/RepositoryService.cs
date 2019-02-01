@@ -36,25 +36,29 @@ namespace CCA.Services.RepositoryNook.Services
                 repoObject.createdDate = DateTime.Now;
             }
 
-            CreateRepositoryIndices(repositoryCollection);
+            CreateRepositoryTextIndices(repositoryCollection);
 
             repositoryCollection.InsertOne(repoObject);
             return repoObject;
         }
-        // create indices, iff not existing, based on passing in Primary, Secondary or Tertiary index value.  
+
         // Indempotent: is a no-op if already exists.
-        private void CreateRepositoryIndices(IMongoCollection<Repository> collection)
+        private void CreateRepositoryTextIndices(IMongoCollection<Repository> collection)
         {
-            var RepositoryModelBuilder = Builders<Repository>.IndexKeys;
+            // text search field     .Text()   is the keyValue
+            var textKey = Builders<Repository>.IndexKeys.Text( t => t.keyValue);       // the key value, is collections text search field, and is highly queryable
+            var options = new CreateIndexOptions() { Name = "IX_keyValue}" }; 
+            collection.Indexes.CreateOne( textKey, options );
 
-            var primaryIndexModel = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.primaryIndex), new CreateIndexOptions() { Name = "IX_primaryIndex" });
-            collection.Indexes.CreateOne(primaryIndexModel);
+            // another indexed field   is the  keyName
+            var indexKey = Builders<Repository>.IndexKeys.Ascending( i => i.keyName);   // the key name, is text and is indexed for speedier queries
+            var ix_options = new CreateIndexOptions() { Name = "IX_keyName}" };
+            collection.Indexes.CreateOne(indexKey, ix_options);
 
-            var indexModel2 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.secondaryIndex), new CreateIndexOptions() { Name = "IX_secondaryIndex" });
-            collection.Indexes.CreateOne(indexModel2);
-
-            var indexModel3 = new CreateIndexModel<Repository>(RepositoryModelBuilder.Ascending(i => i.tertiaryIndex), new CreateIndexOptions() { Name = "IX_tertiaryIndex" });
-            collection.Indexes.CreateOne(indexModel3);
+            // finally the tags are madesearchable
+            var tagsKey = Builders<Repository>.IndexKeys.Ascending(t => t.tags);        // the tags array
+            var tags_ix_options = new CreateIndexOptions() { Name = "IX_tags}" };
+            collection.Indexes.CreateOne(tagsKey, tags_ix_options);
         }
 
     }

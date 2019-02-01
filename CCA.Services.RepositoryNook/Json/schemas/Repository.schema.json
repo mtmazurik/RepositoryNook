@@ -6,7 +6,8 @@
   "title": "Repository",
   "required": [
     "_id",
-    "primaryIndex",
+    "keyName",
+    "keyValue"
     "app",
     "objectSchemaName",
     "objectSchemaUri",
@@ -23,10 +24,20 @@
         null
       ]
     },
-    "primaryIndex": {
-      "$id": "#/properties/key",
+    "keyName": {
+      "$id": "#/properties/keyName",
       "type": "string",
-      "title": "The key Schema",
+      "title": "The keyName Schema",
+      "default": "",
+      "examples": [
+        "flightNumber"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "keyValue": {
+      "$id": "#/properties/keyValue",
+      "type": "string",
+      "title": "The keyValue Schema",
       "default": "",
       "examples": [
         "580"

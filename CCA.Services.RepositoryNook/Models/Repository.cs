@@ -12,10 +12,12 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonElement("_id")]
         public object _id { get; set; }
         [BsonRequired]
-        [BsonElement("key")]
-        public string key { get; set; }
+        [BsonElement("keyName")]
+        public string keyName { get; set; }
+        [BsonElement("keyValue")]
+        public string keyValue { get; set; }
         [BsonElement("tags")]
-        public List<string> tags { get; set; }
+        public List<object> tags { get; set; }
         [BsonElement("createdDate")]
         public DateTime createdDate { get; set; }
         [BsonElement("createdBy")]
