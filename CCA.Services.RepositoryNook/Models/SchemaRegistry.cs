@@ -31,5 +31,7 @@ namespace CCA.Services.RepositoryNook.Models
         public string app { get; set; }
         [BsonElement("schemaBody")]
         public string schemaBody { get; set; }
+        [BsonElement("sampleData")]
+        public string sampleData { get; set; }
     }
 }
