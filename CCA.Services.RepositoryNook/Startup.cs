@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +13,7 @@ using CCA.Services.RepositoryNook.Security;
 using CCA.Services.RepositoryNook.Models;
 using CCA.Services.RepositoryNook.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using CCA.Services.RepositoryNook.Service;
-using System;
+using CCA.Services.RepositoryNook.Services;
 
 namespace CCA.Services.RepositoryNook
 {
@@ -98,7 +98,9 @@ namespace CCA.Services.RepositoryNook
             services.AddTransient<HttpClient>();
             services.AddTransient<IJsonConfiguration, JsonConfiguration>();
             services.AddTransient<IWorker, Worker>();
-            services.AddTransient<IRepositoryNookService, RepositoryNookService>();
+            services.AddTransient<IRepositoryService, RepositoryService>();
+            services.AddTransient<IPlumbingService, PlumbingService>();
+            services.AddTransient<ISchemaRegistryService, SchemaRegistryService>();
 
         }
         public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)

@@ -34,9 +34,9 @@ namespace CCA.Services.RepositoryNook.Models
         public string schemaName { get; set; }
         [BsonElement("schemaUri")]
         public string schemUri { get; set; }
-        [BsonElement("objectType")]
+        [BsonElement("type")]
         public string objectType { get; set; }
-        [BsonElement("objectData")]
+        [BsonElement("data")]
         public string objectData { get; set; }
     }
 }

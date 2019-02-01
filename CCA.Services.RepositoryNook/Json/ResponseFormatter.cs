@@ -31,9 +31,9 @@ namespace CCA.Services.RepositoryNook.JsonHelpers
             };
             return result;
         }
-        public static JsonResult ResponseOK(Repository repoObject, string descr="Success" )
+        public static JsonResult ResponseOK(object theObject, string descr="Success" )
         {
-            Response response = new Response(repoObject);
+            Response response = new Response(theObject);
             response.Meta.Add("Message", descr);
             JsonResult result = new JsonResult(response)
             {

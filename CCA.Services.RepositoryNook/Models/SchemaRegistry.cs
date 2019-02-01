@@ -11,13 +11,12 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonRequired]
         [BsonElement("_id")]
         public object _id { get; set; }
-        [BsonRequired]
-        [BsonElement("$schema")]
-        public string schema { get; set; }
-        [BsonElement("$id")]
-        public string id { get; set; }
-        [BsonElement("title")]
-        public string title{ get; set; }
+        [BsonElement("schemaOrg")]
+        public string schemaOrg { get; set; }
+        [BsonElement("schemaUri")]
+        public string schemaUri { get; set; }
+        [BsonElement("schemaName")]
+        public string schemaName{ get; set; }
         [BsonElement("description")]
         public string description { get; set; }
         [BsonElement("type")]
@@ -27,12 +26,12 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonElement("createdBy")]
         public string createdBy { get; set; }
         [BsonElement("modifiedDate")]
-        public object modifiedDate { get; set; }
+        public DateTime modifiedDate { get; set; }
         [BsonElement("modifiedBy")]
         public string modifiedBy { get; set; }
         [BsonElement("app")]
-        public string objectType { get; set; }
-        [BsonElement("data")]
-        public string data { get; set; }
+        public string app { get; set; }
+        [BsonElement("schemaBody")]
+        public string schemaBody { get; set; }
     }
 }

@@ -21,12 +21,12 @@ namespace CCA.Services.RepositoryNook.Config
         }
 
 
-        public string ConnectionString
+        public string AtlasMongoConnection
         {
             get
             {
-                string connectionString = _configuration.GetSection("ConnectionStrings")["ServiceDb"];
-                if (connectionString is null) throw new ConfigFileReadError("Check appsettings.json; ConnectionString not found.");
+                string connectionString = _configuration["AtlasMongoConnection"];
+                if (connectionString is null) throw new ConfigFileReadError("Check appsettings.json; AtlasMongoConnection not found.");
                 return connectionString;
             }
         }
@@ -38,30 +38,6 @@ namespace CCA.Services.RepositoryNook.Config
                 string intervalString = _configuration["TaskManagerIntervalSeconds"];
                 if (intervalString is null) throw new ConfigFileReadError("Check appsettings.json; TaskManagerIntervalSeconds not found.");
                 return Convert.ToDouble(intervalString);
-            }
-        }
-
-        public string JwtSecretKey
-        {
-            get
-            {
-                string key = _configuration["Jwt:Key"];
-                if (string.IsNullOrEmpty(key))
-                    throw new ConfigFileReadError("Check appsettings.json; JwtSecretkey not found.");
-
-                return key;
-            }
-        }
-
-        public string JwtIssuer
-        {
-            get
-            {
-                string issuer = _configuration["Jwt:Issuer"];
-                if (string.IsNullOrEmpty(issuer))
-                    throw new ConfigFileReadError("Check appsettings.json; JwtIssuer not found.");
-
-                return issuer;
             }
         }
 

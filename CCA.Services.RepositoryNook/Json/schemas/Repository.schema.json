@@ -8,10 +8,10 @@
     "_id",
     "primaryIndex",
     "app",
-    "schemaName",
-    "schemaUri",
-    "type",
-    "data"
+    "objectSchemaName",
+    "objectSchemaUri",
+    "objectType",
+    "objectData"
   ],
   "properties": {
     "_id": {
@@ -115,7 +115,7 @@
       ],
       "pattern": "^(.*)$"
     },
-    "schemaName": {
+    "objectSchemaName": {
       "$id": "#/properties/objectSchemaName",
       "type": "string",
       "title": "The Objectschemaname Schema",
@@ -125,7 +125,7 @@
       ],
       "pattern": "^(.*)$"
     },
-    "schemaUri": {
+    "objectSchemaUri": {
       "$id": "#/properties/objectSchemaUri",
       "type": "string",
       "title": "The Objectschemauri Schema",
@@ -135,7 +135,7 @@
       ],
       "pattern": "^(.*)$"
     },
-    "type": {
+    "objectType": {
       "$id": "#/properties/objectType",
       "type": "string",
       "title": "The Objecttype Schema",
@@ -145,7 +145,7 @@
       ],
       "pattern": "^(.*)$"
     },
-    "data": {
+    "objectData": {
       "$id": "#/properties/objectData",
       "type": "string",
       "title": "The Objectdata Schema",

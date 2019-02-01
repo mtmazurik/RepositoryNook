@@ -2,10 +2,8 @@
 {
     public interface IJsonConfiguration
     {
-        string ConnectionString { get; }
+        string AtlasMongoConnection { get; }
         double TaskManagerIntervalSeconds { get; }
-        string JwtSecretKey { get; }
-        string JwtIssuer { get; }
         bool EnforceTokenLife { get; }
     }
 }
