@@ -1,10 +1,11 @@
 ﻿using CCA.Services.RepositoryNook.Models;
+using System.Threading.Tasks;
 
 namespace CCA.Services.RepositoryNook.Services
 {
     public interface IRepositoryService
     {
-        Repository Create(Repository repoObject);
+        Task<Repository> Create(Repository repoObject);
 
     }
 }

@@ -21,11 +21,11 @@ namespace CCA.Services.RepositoryNook.Services
             _config = config;
         } 
 
-        public Repository Create(Repository repoObject)
+        public async Task<Repository> Create(Repository repoObject)
         {
             var client = new MongoClient(_config.AtlasMongoConnection);
-            var database = client.GetDatabase(DATABASE_NAME);
-            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(REPOSITORY_COLLECTION);
+            var database = client.GetDatabase(repoObject.repository);
+            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
 
             if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
             { 

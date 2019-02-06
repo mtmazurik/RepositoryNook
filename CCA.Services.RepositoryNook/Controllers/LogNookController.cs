@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using SchemaRegistry = CCA.Services.RepositoryNook.Models.SchemaRegistry;
+using System.Threading.Tasks;
 
 namespace CCA.Services.RepositoryNook.Controllers
 {
@@ -21,16 +22,12 @@ namespace CCA.Services.RepositoryNook.Controllers
         [AllowAnonymous]    // no Auth needed - for now
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public IActionResult CreateRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        public async Task<IActionResult> CreateRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
         {
             try
             {
-                // TO-DO: validate: read raw body, check if validation set (?validation=true) on querystring and perform schema validation against incoming repo object
-
-                return ResponseFormatter.ResponseOK(repositoryService.Create(repoObject), "Created");
+                return ResponseFormatter.ResponseOK(await repositoryService.Create(repoObject), "Created");
             }
             catch(ApplicationException exc)
             {
