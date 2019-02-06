@@ -7,6 +7,7 @@ using CCA.Services.RepositoryNook.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using CCA.Services.RepositoryNook.Config;
+using CCA.Services.RepositoryNook.Exceptions;
 
 namespace CCA.Services.RepositoryNook.Services
 {
@@ -23,9 +24,7 @@ namespace CCA.Services.RepositoryNook.Services
 
         public async Task<Repository> Create(Repository repoObject)
         {
-            var client = new MongoClient(_config.AtlasMongoConnection);
-            var database = client.GetDatabase(repoObject.repository);
-            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
 
             if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
             { 
@@ -38,8 +37,31 @@ namespace CCA.Services.RepositoryNook.Services
 
             CreateRepositoryTextIndices(repositoryCollection);
 
-            repositoryCollection.InsertOne(repoObject);
+            await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
+        }
+
+        public async Task Delete(Repository repoObject)
+        {       
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            var result = await repositoryCollection.DeleteOneAsync(filter);
+
+            if (result.DeletedCount == 0)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+        }
+
+        private IMongoCollection<Repository> GetCollectionReference(Repository repoObject)
+        {
+            var client = new MongoClient(_config.AtlasMongoConnection);
+            var database = client.GetDatabase(repoObject.repository);
+            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
+            return repositoryCollection;
         }
 
         // Indempotent: is a no-op if already exists.

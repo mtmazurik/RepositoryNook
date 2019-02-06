@@ -41,6 +41,16 @@ namespace CCA.Services.RepositoryNook.JsonHelpers
             };
             return result;
         }
+        public static JsonResult ResponseBadRequest(object theObject, string descr = "Failed")
+        {
+            Response response = new Response(theObject);
+            response.Meta.Add("Message", descr);
+            JsonResult result = new JsonResult(response)
+            {
+                StatusCode = 400
+            };
+            return result;
+        }
         public static JsonResult Format(int code, IResponse response)
         {
             JsonResult result = new JsonResult(response)

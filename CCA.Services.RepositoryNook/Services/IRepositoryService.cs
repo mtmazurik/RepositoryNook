@@ -6,6 +6,6 @@ namespace CCA.Services.RepositoryNook.Services
     public interface IRepositoryService
     {
         Task<Repository> Create(Repository repoObject);
-
+        Task Delete(Repository repoObject);
     }
 }

@@ -19,7 +19,7 @@ namespace CCA.Services.RepositoryNook.Controllers
     public class RepositoryNookController : Controller
     {
         [HttpPost("")]
-        [AllowAnonymous]    // no Auth needed - for now
+        [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -32,6 +32,24 @@ namespace CCA.Services.RepositoryNook.Controllers
             catch(ApplicationException exc)
             {
                 return BadRequest(exc.InnerException);
+            }
+
+        }
+        [HttpDelete("")]
+        [AllowAnonymous]
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        {
+            try
+            {
+                await repositoryService.Delete(repoObject);
+                return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Deleted"));
+            }
+            catch (ApplicationException exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc,"Failed. _id not found. or, check repository name, and collection name.");
             }
 
         }
