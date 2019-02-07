@@ -33,12 +33,12 @@ namespace CCA.Services.RepositoryNook.Models
         public string repository { get; set; }
         [BsonElement("collection")]
         public string collection { get; set; }
-        [BsonElement("schemaName")]
-        public string schemaName { get; set; }
-        [BsonElement("schemaUri")]
-        public string schemaUri { get; set; }
-        [BsonElement("body")]
-        public string body { get; set; }
+        [BsonElement("validate")]
+        public bool validate { get; set; }
+        [BsonElement("schemaId")]
+        public string schemaId { get; set; }
+        [BsonElement("data")]
+        public string data { get; set; }
     }
     [BsonIgnoreExtraElements]
     public class NameValuePair

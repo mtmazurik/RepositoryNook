@@ -7,6 +7,8 @@ using CCA.Services.RepositoryNook.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using CCA.Services.RepositoryNook.Config;
+using CCA.Services.RepositoryNook.Exceptions;
+using MongoDB.Bson.Serialization;
 
 namespace CCA.Services.RepositoryNook.Services
 {
@@ -23,9 +25,7 @@ namespace CCA.Services.RepositoryNook.Services
 
         public async Task<Repository> Create(Repository repoObject)
         {
-            var client = new MongoClient(_config.AtlasMongoConnection);
-            var database = client.GetDatabase(repoObject.repository);
-            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
 
             if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
             { 
@@ -40,6 +40,67 @@ namespace CCA.Services.RepositoryNook.Services
 
             await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
+        }
+        public async Task<Repository> Read(Repository repoObject)
+        {
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            var fluentFindInterface = repositoryCollection.Find(filter);
+
+            Repository foundObject = await fluentFindInterface.SingleOrDefaultAsync().ConfigureAwait(false);
+
+            if (foundObject is null)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+            return foundObject;
+        }
+
+        public async Task Update(Repository repoObject)
+        {
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            repoObject._id = new ObjectId(repoObjectId);                                                // objectify the GUID string
+            if(repoObject.modifiedDate is null)
+            {
+                repoObject.modifiedDate = DateTime.Now;
+            }
+            var replaceOneResult = await repositoryCollection.ReplaceOneAsync(filter, repoObject, new UpdateOptions { IsUpsert = true });
+
+            if (replaceOneResult.ModifiedCount == 0)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+
+        }
+
+        public async Task Delete(Repository repoObject)
+        {       
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            var result = await repositoryCollection.DeleteOneAsync(filter);
+
+            if (result.DeletedCount == 0)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+        }
+
+        private IMongoCollection<Repository> GetCollectionReference(Repository repoObject)
+        {
+            var client = new MongoClient(_config.AtlasMongoConnection);
+            var database = client.GetDatabase(repoObject.repository);
+            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
+            return repositoryCollection;
         }
 
         // Indempotent: is a no-op if already exists.
