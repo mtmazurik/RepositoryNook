@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using CCA.Services.RepositoryNook.Config;
 using CCA.Services.RepositoryNook.Exceptions;
+using MongoDB.Bson.Serialization;
 
 namespace CCA.Services.RepositoryNook.Services
 {
@@ -39,6 +40,44 @@ namespace CCA.Services.RepositoryNook.Services
 
             await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
+        }
+        public async Task<Repository> Read(Repository repoObject)
+        {
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            var fluentFindInterface = repositoryCollection.Find(filter);
+
+            Repository foundObject = await fluentFindInterface.SingleOrDefaultAsync().ConfigureAwait(false);
+
+            if (foundObject is null)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+            return foundObject;
+        }
+
+        public async Task Update(Repository repoObject)
+        {
+            var repoObjectId = repoObject._id.ToString();
+
+            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
+            repoObject._id = new ObjectId(repoObjectId);                                                // objectify the GUID string
+            if(repoObject.modifiedDate is null)
+            {
+                repoObject.modifiedDate = DateTime.Now;
+            }
+            var replaceOneResult = await repositoryCollection.ReplaceOneAsync(filter, repoObject, new UpdateOptions { IsUpsert = true });
+
+            if (replaceOneResult.ModifiedCount == 0)
+            {
+                throw new RepoSvcDocumentNotFoundException(repoObjectId);
+            }
+
         }
 
         public async Task Delete(Repository repoObject)

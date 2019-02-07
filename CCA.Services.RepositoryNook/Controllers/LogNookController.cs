@@ -18,8 +18,9 @@ namespace CCA.Services.RepositoryNook.Controllers
     [Route("/")]
     public class RepositoryNookController : Controller
     {
-        [HttpPost("")]
-        [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
+
+        [HttpPost("")]  // create
+        [AllowAnonymous]    // allow anonymous (for tier 2 services)  Why? API manager/gateway handle auth to outside world;  inside pod's vlan only trusted services connected to each other
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -35,10 +36,49 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpDelete("")]
+        [HttpGet("")]   // read
         [AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        {
+            try
+            {
+                Repository found = await repositoryService.Read(repoObject);
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (ApplicationException exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Read failed. _id not found; or check repository name and collection name.");
+            }
+
+        }
+        [HttpPut("")]  // update
+        [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        {
+            try
+            {
+                await repositoryService.Update(repoObject);
+                return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Updated"));
+            }
+            catch (ApplicationException exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Update failed. _id not found; or check repository name and collection name.");
+            }
+
+        }
+        [HttpDelete("")]    // delete
+        [AllowAnonymous]
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
         {
@@ -49,7 +89,7 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
             catch (ApplicationException exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc,"Failed. _id not found. or, check repository name, and collection name.");
+                return ResponseFormatter.ResponseBadRequest(exc, "Delete failed. _id not found; or check repository name and collection name.");
             }
 
         }

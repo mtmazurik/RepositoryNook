@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonElement("keyValue")]
         public string keyValue { get; set; }
         [BsonElement("tags")]
-        public List<object> tags { get; set; }
+        public IEnumerable<NameValuePair> tags { get; set; }
         [BsonElement("createdDate")]
         public DateTime createdDate { get; set; }
         [BsonElement("createdBy")]
@@ -38,5 +39,13 @@ namespace CCA.Services.RepositoryNook.Models
         public string schemaUri { get; set; }
         [BsonElement("body")]
         public string body { get; set; }
+    }
+    [BsonIgnoreExtraElements]
+    public class NameValuePair
+    {
+        [BsonElement("name")]
+        public string Name { get; set; }
+        [BsonElement("value")]
+        public string Value { get; set; }
     }
 }
