@@ -5,7 +5,7 @@
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
 .vs/
-/bin/Debug
+/bin
 /obj
 /CCA.Services.RepositoryNook/CCA.Services.RepositoryNook/obj
 /CCA.Services.RepositoryNook/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2
@@ -18,3 +18,4 @@
 /bin/Release/cca.services.RepositoryNook.pdb
 /CCA.Services.RepositoryNook/obj/Debug/netcoreapp2.2
 /CCA.Services.RepositoryNook/obj/Release/netcoreapp2.2
+/CCA.Services.RepositoryNook/CCA.Services.RepositoryNook.csproj.user
