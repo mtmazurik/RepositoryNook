@@ -89,7 +89,7 @@ namespace CCA.Services.RepositoryNook
                 {
                     Title = "RepositoryNook Service",
                     Version = "v1",
-                    Description = "RESTful API, micro service called 'RepositoryNook'",
+                    Description = "API for service called 'RepositoryNook' stores in MongoDB Atlas (hosted)",
                     TermsOfService = "(C) 2018 Cloud Computing Associates (CCA)  All Rights Reserved."
                 });
             });

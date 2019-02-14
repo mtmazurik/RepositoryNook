@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CCA.Services.RepositoryNook.Models
 {

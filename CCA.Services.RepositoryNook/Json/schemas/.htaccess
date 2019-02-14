@@ -1,1 +1,16 @@
-Options +Indexes
+{
+   "_id" : null,
+   "keyName" : "flightNumber",
+   "keyValue" : "580",
+   "tags" : [ {"name" : "planeType", "value" : "777x"}, {"name" : "manufacturer", "value" : "Boeing"} ],
+   "createdDate": null,
+   "createdBy" : "mtmazurik",
+   "modifiedDate": null,
+   "modifiedBy" : null,
+   "app": "FlightBook",
+   "repository" : "flight-db",
+   "collection" : "flights",
+   "validate" : false,
+   "schemaId" : "http://cloudcomputingassociates/schemas/Flight.json.schema",
+   "data" : "{ \"flight\" : { \"flightNumber\" : \"580\", \"dayOfWeek\" : \"Monday\",\"manufacturer\":\"Boeing\", \"planeType\":\"777x\" }}"
+}

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using SchemaRegistry = CCA.Services.RepositoryNook.Models.SchemaRegistry;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace CCA.Services.RepositoryNook.Controllers
 {
@@ -19,97 +20,84 @@ namespace CCA.Services.RepositoryNook.Controllers
     public class RepositoryNookController : Controller
     {
 
-        [HttpPost("")]  // create
-        [AllowAnonymous]    // allow anonymous (for tier 2 services)  Why? API manager/gateway handle auth to outside world;  inside pod's vlan only trusted services connected to each other
+        [HttpPost("{repository}/{collection}")]  // create
+        [AllowAnonymous]    // allow anonymous (for tier 2 services), API Manager or Gateway should handle AUTH
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        public async Task<IActionResult> CreateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, [FromBody]Repository repoObject)
         {
             try
             {
-                return ResponseFormatter.ResponseOK(await repositoryService.Create(repoObject), "Created");
+                return ResponseFormatter.ResponseOK(await repositoryService.Create(repository, collection, repoObject), "Created");
             }
-            catch(ApplicationException exc)
+            catch(Exception exc)
             {
-                return BadRequest(exc.InnerException);
+                return ResponseFormatter.ResponseBadRequest(exc);
             }
 
         }
-        [HttpGet("")]   // read
+        [HttpGet("{repository}/{collection}/{_id}")]   // read
         [AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
         {
             try
             {
-                Repository found = await repositoryService.Read(repoObject);
+                repoObject._id = _id;
+                Repository found = await repositoryService.Read(repository, collection, repoObject);
                 return ResponseFormatter.ResponseOK(found);
             }
-            catch (ApplicationException exc)
+            catch (Exception exc)
             {
                 return ResponseFormatter.ResponseBadRequest(exc, "Read failed. _id not found; or check repository name and collection name.");
             }
 
         }
-        [HttpPut("")]  // update
+        [HttpPut("{repository}/{collection}")]  // update
         [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Update(repoObject);
+                await repositoryService.Update(repository, collection, repoObject);
                 return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Updated"));
             }
-            catch (ApplicationException exc)
+            catch (Exception exc)
             {
                 return ResponseFormatter.ResponseBadRequest(exc, "Update failed. _id not found; or check repository name and collection name.");
             }
 
         }
-        [HttpDelete("")]    // delete
+        [HttpDelete("{repository}/{collection}/{_id}")]    // delete
         [AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, [FromBody]Repository repoObject)
+        public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Delete(repoObject);
+                if (repoObject is null) repoObject = new Repository();
+                repoObject._id = _id;
+                await repositoryService.Delete(repository, collection, repoObject);
                 return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Deleted"));
             }
-            catch (ApplicationException exc)
+            catch (Exception exc)
             {
                 return ResponseFormatter.ResponseBadRequest(exc, "Delete failed. _id not found; or check repository name and collection name.");
             }
 
         }
-        [HttpPost("schema")]
-        [AllowAnonymous]    // no Auth needed - for now
-        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(500)]
-        public IActionResult CreateSchemaRegistryObject([FromServices]ISchemaRegistryService service, [FromBody]SchemaRegistry schemaRegistry)
-        {
-            try
-            {
-                return ResponseFormatter.ResponseOK(service.Create(schemaRegistry), "Created");
-            }
-            catch (ApplicationException exc)
-            {
-                return BadRequest(exc);
-            }
 
-        }
         [HttpPut("kill")]   // Kills the main thread, effectively shutting it down
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         public IActionResult Kill([FromServices]IPlumbingService instrument)

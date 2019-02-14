@@ -17,3 +17,4 @@
 /bin/Release/cca.services.RepositoryNook.dll
 /bin/Release/cca.services.RepositoryNook.pdb
 /CCA.Services.RepositoryNook/obj/Debug/netcoreapp2.2
+/CCA.Services.RepositoryNook/obj/Release/netcoreapp2.2

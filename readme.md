@@ -6,10 +6,26 @@ Content is copyright 2019 (c) Cloud Computing Associates authors, released under
 
 Content based on https://github.com/mtmazurik/RepositoryNook used under the [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) license.
 
+Readme.md - Last updated 2/14/2019 mtm
+
 ### Overview
-RepositoryNook is a RESTful API data store service. It can run in any container, on any host-platform, that can host Linux Docker images.
+RepositoryNook is a service that exposes a RESTful API. It can run in any container, on any host-platform, that can host Linux Docker images.
 REST API, controller and code written in ASPNETCore and C#.  It targest an Atlas MongoDB database for the data store.
 We start with Azure container deployment (below).
+
+It defaults to Port 8902.  
+
+It is intended to be part of a set of services, brought together inside of a Microservice, which I call a Level II service. (The Microservice being a Level I service)
+
+Swagger help can be seen, after running (locally) with uri: http://localhost:8902/swagger/index.html
+
+I've deployed to Azure and AWS, and it stores repository info Mongo DB Atlas (hosted).
+
+Unlike MongoDB itself, which will create a Database and Collection if it doesn't exist, I've instituted a check for the Database/Collection which
+will throw an exception and return a 400 (Bad Request) if it doesn't exist.   We don't need typo's proliferating databases and collections out there in the wild.
+It is easy to connect with MongoDB Compass to Atlas and create the Database\Collection before the services are put to use.
+
+At present we do not support the programmatic creation of DB and collection, but that wouldn't be difficult to add.
 
 #### Azure 
 Step 1:

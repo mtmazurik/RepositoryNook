@@ -15,17 +15,17 @@ namespace CCA.Services.RepositoryNook.Services
     public class RepositoryService : IRepositoryService
     {
         private IJsonConfiguration _config;
-        private readonly string DATABASE_NAME = "repository-nook-db";
-        private readonly string REPOSITORY_COLLECTION = "repository";
+        private readonly string GENERIC_DB_NAME = "repository-nook-db";
+        private readonly string GENERIC_COLLECTION_NAME = "repository";
 
         public RepositoryService(IJsonConfiguration config)     // ctor
         {
             _config = config;
         } 
 
-        public async Task<Repository> Create(Repository repoObject)
+        public async Task<Repository> Create(string repository, string collection, Repository repoObject)
         {
-            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection, repoObject);
 
             if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
             { 
@@ -41,11 +41,11 @@ namespace CCA.Services.RepositoryNook.Services
             await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
         }
-        public async Task<Repository> Read(Repository repoObject)
+        public async Task<Repository> Read(string repository, string collection, Repository repoObject)
         {
             var repoObjectId = repoObject._id.ToString();
 
-            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection, repoObject);
 
             var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
             var fluentFindInterface = repositoryCollection.Find(filter);
@@ -59,11 +59,11 @@ namespace CCA.Services.RepositoryNook.Services
             return foundObject;
         }
 
-        public async Task Update(Repository repoObject)
+        public async Task Update(string repository, string collection, Repository repoObject)
         {
             var repoObjectId = repoObject._id.ToString();
 
-            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection, repoObject);
 
             var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
             repoObject._id = new ObjectId(repoObjectId);                                                // objectify the GUID string
@@ -80,11 +80,11 @@ namespace CCA.Services.RepositoryNook.Services
 
         }
 
-        public async Task Delete(Repository repoObject)
+        public async Task Delete(string repository, string collection, Repository repoObject)
         {       
             var repoObjectId = repoObject._id.ToString();
 
-            IMongoCollection<Repository> repositoryCollection = GetCollectionReference(repoObject);
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection, repoObject);
 
             var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(repoObjectId));
             var result = await repositoryCollection.DeleteOneAsync(filter);
@@ -95,12 +95,35 @@ namespace CCA.Services.RepositoryNook.Services
             }
         }
 
-        private IMongoCollection<Repository> GetCollectionReference(Repository repoObject)
+        private IMongoCollection<Repository> ConnectToCollection(string repository, string collection, Repository repoObject)
         {
             var client = new MongoClient(_config.AtlasMongoConnection);
-            var database = client.GetDatabase(repoObject.repository);
-            IMongoCollection<Repository> repositoryCollection = database.GetCollection<Repository>(repoObject.collection);
-            return repositoryCollection;
+
+            IMongoDatabase database = ConnectToDatabase(repository, repoObject, client);
+
+            if( ! CheckIfCollectionExists(database, collection))
+            {
+                throw new RepoSvcDatabaseOrCollectionNotFound($"Database or Collection Not Found. Check request and retry. Repository: {repository}, Collection: {collection}");
+            }
+
+            if (collection == null)
+            {
+                collection = GENERIC_COLLECTION_NAME;
+            }
+            repoObject.collection = collection;
+
+            return database.GetCollection<Repository>(collection);
+        }
+
+        private IMongoDatabase ConnectToDatabase(string repository, Repository repoObject, MongoClient client)
+        {
+            if (repository == null)
+            {
+                repository = GENERIC_DB_NAME;
+            }
+            repoObject.repository = repository; // stuff into repoObject
+            var database = client.GetDatabase(repository);
+            return database;
         }
 
         // Indempotent: is a no-op if already exists.
@@ -122,5 +145,11 @@ namespace CCA.Services.RepositoryNook.Services
             collection.Indexes.CreateOne(tagsKey, tags_ix_options);
         }
 
+        private bool CheckIfCollectionExists(IMongoDatabase database, string collectionName)
+        {
+            var nameFilter = new BsonDocument("name", collectionName);
+            var options = new ListCollectionNamesOptions { Filter = nameFilter };
+            return database.ListCollectionNames(options).Any();
+        }
     }
 }
