@@ -19,3 +19,13 @@
 /CCA.Services.RepositoryNook/obj/Debug/netcoreapp2.2
 /CCA.Services.RepositoryNook/obj/Release/netcoreapp2.2
 /CCA.Services.RepositoryNook/CCA.Services.RepositoryNook.csproj.user
+/CCA.Services.RepositoryNook/obj/project.assets.json
+/CCA.Services.RepositoryNook/obj/Docker/TargetFramework.cache
+/CCA.Services.RepositoryNook/obj/Docker/RelativeOutputAssemblyPath.Regular.cache
+/CCA.Services.RepositoryNook/obj/Docker/RelativeOutputAssemblyPath.Fast.cache
+/CCA.Services.RepositoryNook/obj/Docker/ProjectReferences.cache
+/CCA.Services.RepositoryNook/obj/Docker/CanonicalServiceNames.cache
+/CCA.Services.RepositoryNook/obj/Docker/AppType.cache
+/CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.g.targets
+/CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.g.props
+/CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.cache
