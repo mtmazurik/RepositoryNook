@@ -29,3 +29,8 @@
 /CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.g.targets
 /CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.g.props
 /CCA.Services.RepositoryNook/obj/CCA.Services.RepositoryNook.csproj.nuget.cache
+/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2/CCA.Services.RepositoryNook.deps.json
+/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2/CCA.Services.RepositoryNook.dll
+/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2/CCA.Services.RepositoryNook.pdb
+/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2/CCA.Services.RepositoryNook.runtimeconfig.dev.json
+/CCA.Services.RepositoryNook/bin/Debug/netcoreapp2.2/CCA.Services.RepositoryNook.runtimeconfig.json

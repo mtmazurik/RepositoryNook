@@ -36,8 +36,8 @@ namespace CCA.Services.RepositoryNook.Models
         public string collection { get; set; }
         [BsonElement("validate")]
         public bool validate { get; set; }
-        [BsonElement("schemaId")]
-        public string schemaId { get; set; }
+        [BsonElement("schemaUri")]
+        public string schemaUri { get; set; }
         [BsonElement("data")]
         public string data { get; set; }
     }
