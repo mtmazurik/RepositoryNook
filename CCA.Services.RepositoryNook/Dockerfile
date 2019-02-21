@@ -4,14 +4,14 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ["CCA.Services.repositorynook/CCA.Services.repositorynook.csproj", "CCA.Services.repositorynook/"]
-RUN dotnet restore "CCA.Services.repositorynook/CCA.Services.repositorynook.csproj"
+COPY ["CCA.Services.RepositoryNook/CCA.Services.RepositoryNook.csproj", "CCA.Services.RepositoryNook/"]
+RUN dotnet restore "CCA.Services.RepositoryNook/CCA.Services.RepositoryNook.csproj"
 COPY . .
-WORKDIR "/src/CCA.Services.repositorynook"
-RUN dotnet build "CCA.Services.repositorynook.csproj" -c Release -o /app
+WORKDIR "/src/CCA.Services.RepositoryNook"
+RUN dotnet build "CCA.Services.RepositoryNook.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "CCA.Services.repositorynook.csproj" -c Release -o /app
+RUN dotnet publish "CCA.Services.RepositoryNook.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app

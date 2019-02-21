@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   lognook:
-    image: mtmazurik/repositorynook
+    image: mtmazurik/RepositoryNook
     build:
       context: .
       dockerfile: CCA.Services.RepositoryNook/Dockerfile
