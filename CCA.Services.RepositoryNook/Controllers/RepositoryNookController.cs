@@ -10,7 +10,6 @@ using CCA.Services.RepositoryNook.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
-using SchemaRegistry = CCA.Services.RepositoryNook.Models.SchemaRegistry;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
@@ -47,8 +46,8 @@ namespace CCA.Services.RepositoryNook.Controllers
         {
             try
             {
-                repoObject._id = _id;
-                Repository found = await repositoryService.Read(repository, collection, repoObject);
+                Repository found = await repositoryService.Read(_id, repository, collection, repoObject);
+
                 return ResponseFormatter.ResponseOK(found);
             }
             catch (Exception exc)
@@ -57,17 +56,18 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpPut("{repository}/{collection}")]  // update
+        [HttpPut("{repository}/{collection}/{_id}")]  // update
         [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, [FromBody]Repository repoObject)
+        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Update(repository, collection, repoObject);
+                await repositoryService.Update(_id, repository, collection, repoObject);
+
                 return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Updated"));
             }
             catch (Exception exc)
@@ -86,9 +86,8 @@ namespace CCA.Services.RepositoryNook.Controllers
         {
             try
             {
-                if (repoObject is null) repoObject = new Repository();
-                repoObject._id = _id;
-                await repositoryService.Delete(repository, collection, repoObject);
+                await repositoryService.Delete(_id, repository, collection);
+
                 return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Deleted"));
             }
             catch (Exception exc)
