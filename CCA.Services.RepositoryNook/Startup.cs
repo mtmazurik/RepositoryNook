@@ -6,13 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CCA.Services.RepositoryNook.Config;
-using CCA.Services.RepositoryNook.Security;
 using CCA.Services.RepositoryNook.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CCA.Services.RepositoryNook.Services;
+using CCA.Services.RepositoryNook.HelperClasses;
 
 namespace CCA.Services.RepositoryNook
 {

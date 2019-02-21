@@ -4,7 +4,7 @@ using System.Net;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
-using CCA.Services.RepositoryNook.JsonHelpers;
+using CCA.Services.RepositoryNook.HelperClasses;
 using CCA.Services.RepositoryNook.Models;
 using CCA.Services.RepositoryNook.Services;
 using Microsoft.Extensions.Logging;

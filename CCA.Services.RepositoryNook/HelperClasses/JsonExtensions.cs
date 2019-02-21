@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CCA.Services.RepositoryNook.Exceptions;
 
-namespace CCA.Services.RepositoryNook.JsonHelpers
+namespace CCA.Services.RepositoryNook.HelperClasses
 {
     public static class JsonExtensions
     {
