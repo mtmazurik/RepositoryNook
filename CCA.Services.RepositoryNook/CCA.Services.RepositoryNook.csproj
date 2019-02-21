@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AssemblyName>CCA.Services.RepositoryNook</AssemblyName>
+    <AssemblyName>cca.services.repositorynook</AssemblyName>
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
     <Version>0.1.0</Version>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
