@@ -115,7 +115,11 @@ namespace CCA.Services.RepositoryNook
 
             app.UseCors("CorsPolicy");                                                      // CORS; Cross-Origin Resource Sharing
 
-            app.UseMvc();
+            app.UseMvc( routes =>
+            {
+                routes.MapRoute("admin", "{controller=AdminController}/{action=Index}");
+                routes.MapRoute("default", "{controller=RepositoryNookController}/{action=Index}");
+            });
 
             _logger.Log(LogLevel.Information,"RepositoryNook service started.");            // log start of service
 

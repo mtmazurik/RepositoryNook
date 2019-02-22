@@ -96,25 +96,5 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-
-        [HttpPut("kill")]   // Kills the main thread, effectively shutting it down
-        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        public IActionResult Kill([FromServices]IAdminService instrument)
-        {
-            return ResponseFormatter.ResponseOK(instrument.kill());
-        }
-        [HttpGet("ping")]   // ping
-        [AllowAnonymous]    // no Auth / controller response only (not service level responses)
-        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        public IActionResult GetPing()
-        {
-            return ResponseFormatter.ResponseOK((new JProperty("Ping", "Success")));
-        }
-        [HttpGet("version")]   // service version (from compiled assembly version)
-        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        public IActionResult GetVersion([FromServices]IAdminService instrumentation)
-        {
-            return ResponseFormatter.ResponseOK((new JProperty("Version", instrumentation.version())));
-        }
     }
 }
