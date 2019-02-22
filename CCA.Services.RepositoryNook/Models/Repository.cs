@@ -41,12 +41,4 @@ namespace CCA.Services.RepositoryNook.Models
         [BsonElement("data")]
         public string data { get; set; }
     }
-    [BsonIgnoreExtraElements]
-    public class NameValuePair
-    {
-        [BsonElement("name")]
-        public string Name { get; set; }
-        [BsonElement("value")]
-        public string Value { get; set; }
-    }
 }

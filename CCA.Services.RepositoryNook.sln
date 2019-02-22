@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{1EF72A7B
 		Azure\azure-resmgr-template.json = Azure\azure-resmgr-template.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCA.Services.RepositoryNook.Tests", "CCA.Services.RepositoryNook.Tests\CCA.Services.RepositoryNook.Tests.csproj", "{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ADA83A9-B7BA-40BC-8B33-B7F212918D44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
