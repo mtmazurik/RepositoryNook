@@ -99,7 +99,7 @@ namespace CCA.Services.RepositoryNook.Controllers
 
         [HttpPut("kill")]   // Kills the main thread, effectively shutting it down
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        public IActionResult Kill([FromServices]IPlumbingService instrument)
+        public IActionResult Kill([FromServices]IAdminService instrument)
         {
             return ResponseFormatter.ResponseOK(instrument.kill());
         }
@@ -112,7 +112,7 @@ namespace CCA.Services.RepositoryNook.Controllers
         }
         [HttpGet("version")]   // service version (from compiled assembly version)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        public IActionResult GetVersion([FromServices]IPlumbingService instrumentation)
+        public IActionResult GetVersion([FromServices]IAdminService instrumentation)
         {
             return ResponseFormatter.ResponseOK((new JProperty("Version", instrumentation.version())));
         }

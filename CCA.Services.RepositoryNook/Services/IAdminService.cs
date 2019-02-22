@@ -1,6 +1,6 @@
 ﻿namespace CCA.Services.RepositoryNook.Services
 {
-    public interface IPlumbingService
+    public interface IAdminService
     {
         string version();
         string kill();

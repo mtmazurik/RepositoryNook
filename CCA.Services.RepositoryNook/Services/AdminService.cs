@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CCA.Services.RepositoryNook.Services
 {
-    public class PlumbingService : IPlumbingService
+    public class AdminService : IAdminService
     {
         private IApplicationLifetime _applicationLifetime;
 
-        public PlumbingService(IApplicationLifetime applicationLifetime)     // ctor
+        public AdminService(IApplicationLifetime applicationLifetime)     // ctor
         {
             _applicationLifetime = applicationLifetime;
 

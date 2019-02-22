@@ -93,7 +93,7 @@ namespace CCA.Services.RepositoryNook
             services.AddTransient<HttpClient>();
             services.AddTransient<IJsonConfiguration, JsonConfiguration>();
             services.AddTransient<IRepositoryService, RepositoryService>();
-            services.AddTransient<IPlumbingService, PlumbingService>();
+            services.AddTransient<IAdminService, AdminService>();
         }
         public void Configure(IApplicationBuilder app, IApplicationLifetime applicationLifetime, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
