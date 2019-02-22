@@ -51,7 +51,7 @@ namespace CCA.Services.RepositoryNook.Services
             return repoObject;
         }
 
-        public async Task<Repository> Read(string _id, string repository, string collection, Repository repoObject)
+        public async Task<Repository> Read(string _id, string repository, string collection)
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
@@ -97,10 +97,10 @@ namespace CCA.Services.RepositoryNook.Services
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(_id));
+            var filter = Builders<Repository>.Filter.Eq("_id", ObjectId.Parse(_id));
             var result = await repositoryCollection.DeleteOneAsync(filter);
 
-            if (result.DeletedCount == 0)
+            if (result.DeletedCount != 1)
             {
                 throw new RepoSvcDocumentNotFoundException($"DocumentId: {_id}");
             }

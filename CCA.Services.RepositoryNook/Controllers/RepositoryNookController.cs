@@ -32,7 +32,7 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
             catch(Exception exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc);
+                return ResponseFormatter.ResponseBadRequest(exc, "Create failed.");
             }
 
         }
@@ -42,17 +42,17 @@ namespace CCA.Services.RepositoryNook.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
+        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id)
         {
             try
             {
-                Repository found = await repositoryService.Read(_id, repository, collection, repoObject);
+                Repository found = await repositoryService.Read(_id, repository, collection);
 
                 return ResponseFormatter.ResponseOK(found);
             }
             catch (Exception exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc, "Read failed. _id not found; or check repository name and collection name.");
+                return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
             }
 
         }
@@ -72,7 +72,7 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
             catch (Exception exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc, "Update failed. _id not found; or check repository name and collection name.");
+                return ResponseFormatter.ResponseBadRequest(exc, "Update failed.");
             }
 
         }
@@ -88,11 +88,11 @@ namespace CCA.Services.RepositoryNook.Controllers
             {
                 await repositoryService.Delete(_id, repository, collection);
 
-                return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Deleted"));
+                return ResponseFormatter.ResponseOK($"_id: {_id} deleted.");
             }
             catch (Exception exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc, "Delete failed. _id not found; or check repository name and collection name.");
+                return ResponseFormatter.ResponseBadRequest(exc, $"Delete failed for _id: {_id}.");
             }
 
         }
