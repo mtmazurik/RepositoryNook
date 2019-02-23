@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace CCA.Services.RepositoryNook.Controllers
 {
@@ -53,6 +54,26 @@ namespace CCA.Services.RepositoryNook.Controllers
             catch (Exception exc)
             {
                 return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
+            }
+
+        }
+        [HttpGet("{repository}/{collection}")]   // query by key
+        [AllowAnonymous]
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> QueryByKeyRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string keyName, string keyValue)
+        {
+            try
+            {
+                List<Repository> found = repositoryService.QueryByKey(repository, collection, keyName, keyValue);
+
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Query failed.");
             }
 
         }

@@ -66,7 +66,21 @@ namespace CCA.Services.RepositoryNook.Services
             }
             return foundObject;
         }
+        public List<Repository> QueryByKey(string repository, string collection, string keyName, string keyValue)
+        {
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
+            //var keyNameFilter = Builders<Repository>.Filter.Eq(d => d.keyName, keyName);
+            //var keyValueFilter = Builders<Repository>.Filter.Eq(d => d.keyValue, keyValue);
+
+            var foundObject = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList(); // linq complex query
+
+            if (foundObject is null)
+            {
+                throw new RepoSvcDocumentNotFoundException($"keyName: {keyName}, keyValue: {keyValue}");
+            }
+            return foundObject;
+        }
         public async Task Update(string _id, string repository, string collection, Repository repoObject)
         {
 
