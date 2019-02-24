@@ -70,16 +70,26 @@ namespace CCA.Services.RepositoryNook.Services
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            //var keyNameFilter = Builders<Repository>.Filter.Eq(d => d.keyName, keyName);
-            //var keyValueFilter = Builders<Repository>.Filter.Eq(d => d.keyValue, keyValue);
+            var found = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList(); // linq complex query
 
-            var foundObject = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList(); // linq complex query
-
-            if (foundObject is null)
+            if (found is null)
             {
                 throw new RepoSvcDocumentNotFoundException($"keyName: {keyName}, keyValue: {keyValue}");
             }
-            return foundObject;
+            return found;
+        }
+        public List<Repository> QueryByTag(string repository, string collection, string tagName, string tagValue)
+        {
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
+
+            var builder = Builders<Repository>.Filter.ElemMatch(t => t.tags, x => x.Name == tagName && x.Value == tagValue);
+            var found = repositoryCollection.Find(builder).ToList();
+
+            if (found is null)
+            {
+                throw new RepoSvcDocumentNotFoundException($"tagName: {tagName}, tagValue: {tagValue}");
+            }
+            return found;
         }
         public async Task Update(string _id, string repository, string collection, Repository repoObject)
         {

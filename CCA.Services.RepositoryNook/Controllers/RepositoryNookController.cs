@@ -57,7 +57,7 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{repository}/{collection}")]   // query by key
+        [HttpGet("{repository}/{collection}/key")]   // query by key
         [AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
@@ -68,6 +68,26 @@ namespace CCA.Services.RepositoryNook.Controllers
             try
             {
                 List<Repository> found = repositoryService.QueryByKey(repository, collection, keyName, keyValue);
+
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Query failed.");
+            }
+
+        }
+        [HttpGet("{repository}/{collection}/tag")]   // query by tag
+        [AllowAnonymous]
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> QueryByTagRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string tagName, string tagValue)
+        {
+            try
+            {
+                List<Repository> found = repositoryService.QueryByTag(repository, collection, tagName, tagValue);
 
                 return ResponseFormatter.ResponseOK(found);
             }
