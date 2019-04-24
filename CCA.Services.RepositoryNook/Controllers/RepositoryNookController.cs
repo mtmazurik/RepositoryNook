@@ -19,17 +19,47 @@ namespace CCA.Services.RepositoryNook.Controllers
     [Route("/")]
     public class RepositoryNookController : Controller
     {
-
-        [HttpPost("{repository}/{collection}")]  // create
-        [AllowAnonymous]    // allow anonymous (for tier 2 services), API Manager or Gateway should handle AUTH
+        [HttpGet]   // GET all databases
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, [FromBody]Repository repoObject)
+        public async Task<IActionResult> GetDatabases([FromServices]IRepositoryService repositoryService)
         {
             try
             {
-                return ResponseFormatter.ResponseOK(await repositoryService.Create(repository, collection, repoObject), "Created");
+                List<string> found = await repositoryService.GetDatabases();
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Get databases failed.");
+            }
+        }
+        [HttpGet("{database}")]   // GET all collections
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetCollections([FromServices]IRepositoryService repositoryService, string database)
+        {
+            try
+            {
+                List<string> found = await repositoryService.GetCollections(database);
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Get collections failed.");
+            }
+        }
+        [HttpPost("{database}/{collection}")]  // POST (C)reate Repository object - CRUD operation: Create
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> CreateRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, [FromBody]Repository repoObject)
+        {
+            try
+            {
+                return ResponseFormatter.ResponseOK(await repositoryService.Create(database, collection, repoObject), "Created");
             }
             catch(Exception exc)
             {
@@ -37,17 +67,16 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{repository}/{collection}/{_id}")]   // read
-        [AllowAnonymous]
+        [HttpGet("{database}/{collection}/{_id}")]   // GET Repository object-by-id (Query by Id)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id)
+        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
         {
             try
             {
-                Repository found = await repositoryService.Read(_id, repository, collection);
+                Repository found = await repositoryService.Read(_id, database, collection);
 
                 return ResponseFormatter.ResponseOK(found);
             }
@@ -57,17 +86,35 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{repository}/{collection}/key")]   // query by key
-        [AllowAnonymous]
+        [HttpGet("{database}/{collection}/")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> QueryByKeyRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string keyName, string keyValue)
+        public async Task<IActionResult> GetAllRepositoryObjects([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
         {
             try
             {
-                List<Repository> found = repositoryService.QueryByKey(repository, collection, keyName, keyValue);
+                List<Repository> found = repositoryService.ReadAll(database, collection);
+
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Read All failed.");
+            }
+
+        }
+        [HttpGet("{database}/{collection}/key")]   // query by keyName = keyValue
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> QueryByKeyRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string keyName, string keyValue)
+        {
+            try
+            {
+                List<Repository> found = repositoryService.QueryByKey(database, collection, keyName, keyValue);
 
                 return ResponseFormatter.ResponseOK(found);
             }
@@ -77,17 +124,16 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{repository}/{collection}/tag")]   // query by tag
-        [AllowAnonymous]
+        [HttpGet("{database}/{collection}/tag")]   // query by tagName = tagValue
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> QueryByTagRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string tagName, string tagValue)
+        public async Task<IActionResult> QueryByTagRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string tagName, string tagValue)
         {
             try
             {
-                List<Repository> found = repositoryService.QueryByTag(repository, collection, tagName, tagValue);
+                List<Repository> found = repositoryService.QueryByTag(database, collection, tagName, tagValue);
 
                 return ResponseFormatter.ResponseOK(found);
             }
@@ -97,37 +143,45 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpPut("{repository}/{collection}/{_id}")]  // update
-        [AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
+        [HttpPut("{database}/{collection}/{_id}")]  // update
+        //[AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
+        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Update(_id, repository, collection, repoObject);
-
-                return ResponseFormatter.ResponseOK(new JProperty(repoObject._id.ToString(), "Updated"));
+                await repositoryService.Update(_id, database, collection, repoObject);
             }
             catch (Exception exc)
             {
                 return ResponseFormatter.ResponseBadRequest(exc, "Update failed.");
             }
+            try
+            {
+                Repository found = await repositoryService.Read(_id, database, collection);
+
+                return ResponseFormatter.ResponseOK(found, "Updated");
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Retreiving Update failed. Record may still have been written.");
+            }
 
         }
-        [HttpDelete("{repository}/{collection}/{_id}")]    // delete
-        [AllowAnonymous]
+        [HttpDelete("{database}/{collection}/{_id}")]    // delete
+        //[AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, string repository, string collection, string _id, [FromBody]Repository repoObject)
+        public async Task<IActionResult> DeleteRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Delete(_id, repository, collection);
+                await repositoryService.Delete(_id, database, collection);
 
                 return ResponseFormatter.ResponseOK($"_id: {_id} deleted.");
             }

@@ -26,7 +26,28 @@ namespace CCA.Services.RepositoryNook.Services
         {
             _config = config;
         }
+        public async Task<List<string>> GetDatabases()
+        {
+            var client = new MongoClient(_config.AtlasMongoConnection);
+            List<string> databases = new List<string>();
 
+            using (var cursor = await client.ListDatabasesAsync())
+            {
+                await cursor.ForEachAsync(d => databases.Add(d.ToString()));
+            }
+            return databases;
+        }
+        public async Task<List<string>> GetCollections(string database)
+        {
+            var client = new MongoClient(_config.AtlasMongoConnection);
+            List<string> collections = new List<string>();
+
+            using (var cursor = await client.GetDatabase(database).ListCollectionsAsync())
+            {
+                await cursor.ForEachAsync(d => collections.Add( new JObject(new JProperty("name",d["name"].ToString())).ToString()));
+            }
+            return collections;
+        }
         public async Task<Repository> Create(string repository, string collection, Repository repoObject)
         {
             if( repoObject.validate )
@@ -55,7 +76,7 @@ namespace CCA.Services.RepositoryNook.Services
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(_id));
+            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(_id));      // FIND with filter  filter("_id" = ObjectId(_id) ) - IS AN ASYNC CALL 
             var fluentFindInterface = repositoryCollection.Find(filter);
 
             Repository foundObject = await fluentFindInterface.SingleOrDefaultAsync().ConfigureAwait(false);
@@ -66,11 +87,23 @@ namespace CCA.Services.RepositoryNook.Services
             }
             return foundObject;
         }
+        public List<Repository> ReadAll(string repository, string collection)           // READ ALL repository object (mongo documents) - NOT AN ASYNC CALL
+        {
+            IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
+
+            var found = repositoryCollection.AsQueryable().ToList();
+
+            if (found is null)
+            {
+                throw new RepoSvcDocumentNotFoundException("RepositoryService.ReadAll() error.");
+            }
+            return found;
+        }
         public List<Repository> QueryByKey(string repository, string collection, string keyName, string keyValue)
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var found = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList(); // linq complex query
+            var found = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList();          // FIND keyName (req) and keyValue (req) - NOT AN ASYNC CALL
 
             if (found is null)
             {
@@ -82,7 +115,8 @@ namespace CCA.Services.RepositoryNook.Services
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var builder = Builders<Repository>.Filter.ElemMatch(t => t.tags, x => x.Name == tagName && x.Value == tagValue);
+            var builder = Builders<Repository>.Filter.ElemMatch(t => t.tags, x => x.Name == tagName && x.Value == tagValue);  // FIND tagName (req) and tagValue (req) - NOT AN ASYNC CALL
+
             var found = repositoryCollection.Find(builder).ToList();
 
             if (found is null)

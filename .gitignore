@@ -95,3 +95,5 @@
 /CCA.Services.RepositoryNook.Tests/obj/CCA.Services.RepositoryNook.Tests.csproj.nuget.g.targets
 /CCA.Services.RepositoryNook.Tests/obj/CCA.Services.RepositoryNook.Tests.csproj.nuget.g.props
 /CCA.Services.RepositoryNook.Tests/obj/CCA.Services.RepositoryNook.Tests.csproj.nuget.cache
+/CCA.Services.RepositoryNook/obj
+/CCA.Services.RepositoryNook.Tests/obj
