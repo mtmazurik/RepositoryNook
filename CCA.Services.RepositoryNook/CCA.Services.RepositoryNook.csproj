@@ -59,7 +59,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DockerTargetOS>Linux</DockerTargetOS>
     <LangVersion>latest</LangVersion>
-    <StartupObject>CCA.Services.RepositoryNook.Program</StartupObject>
+    <StartupObject></StartupObject>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <ApplicationInsightsResourceId>/subscriptions/952dfb7d-08e5-4e85-af0e-1a52239f9f47/resourcegroups/ContainersResourceGroup/providers/microsoft.insights/components/ContainersInsights</ApplicationInsightsResourceId>

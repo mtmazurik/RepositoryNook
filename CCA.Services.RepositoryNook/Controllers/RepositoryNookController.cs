@@ -86,7 +86,7 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{database}/{collection}/")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
+        [HttpGet("{database}/{collection}/repository")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
