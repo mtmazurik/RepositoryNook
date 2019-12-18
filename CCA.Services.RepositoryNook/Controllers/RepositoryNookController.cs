@@ -67,25 +67,25 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        //[HttpGet("{database}/{collection}/{_id}")]   // GET Repository object-by-id (Query by Id)      application should care about query by key or tag (not id) Delete by ID only
-        //[SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(500)]
-        //public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
-        //{
-        //    try
-        //    {
-        //        Repository found = await repositoryService.Read(_id, database, collection);
+        [HttpGet("{database}/{collection}/id/{_id}")]   // GET Repository object-by-id (Query by Id)      application should care about query by key or tag (not id) Delete by ID only
+        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
+        {
+            try
+            {
+                Repository found = await repositoryService.Read(_id, database, collection);
 
-        //        return ResponseFormatter.ResponseOK(found);
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
-        //    }
+                return ResponseFormatter.ResponseOK(found);
+            }
+            catch (Exception exc)
+            {
+                return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
+            }
 
-        //}
+        }
         [HttpGet("{database}/{collection}")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
@@ -154,17 +154,17 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpPut("{database}/{collection}/{_id}")]  // update
+        [HttpPut("{database}/{collection}")]  // update
         //[AllowAnonymous]    // allow anonymous as Tier 2, and API manager/gateway handle auth otherwise - we'll omit middleware from the Microservice API methods (for now)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id, [FromBody]Repository repoObject)
+        public async Task<IActionResult> UpdateRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, [FromBody]Repository repoObject)
         {
             try
             {
-                await repositoryService.Update(_id, database, collection, repoObject);
+                await repositoryService.Update( database, collection, repoObject);
             }
             catch (Exception exc)
             {
@@ -172,9 +172,9 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
             try
             {
-                Repository found = await repositoryService.Read(_id, database, collection);
+                await repositoryService.Update(database, collection, repoObject);
 
-                return ResponseFormatter.ResponseOK(found, "Updated");
+                return ResponseFormatter.ResponseOK(repoObject, "Updated");
             }
             catch (Exception exc)
             {
@@ -192,7 +192,7 @@ namespace CCA.Services.RepositoryNook.Controllers
         {
             try
             {
-                await repositoryService.Delete(_id, database, collection);
+                await repositoryService.Delete(database, collection, _id);
 
                 return ResponseFormatter.ResponseOK($"_id: {_id} deleted.");
             }

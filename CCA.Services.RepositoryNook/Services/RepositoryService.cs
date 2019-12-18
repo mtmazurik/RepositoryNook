@@ -64,6 +64,15 @@ namespace CCA.Services.RepositoryNook.Services
 
             //CreateRepositoryTextIndices(repositoryCollection);   enable auto-indexing feature after re-doing the separation of the key/value pairs for "key" and "tags"
 
+            if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
+            {
+                repoObject._id = ObjectId.GenerateNewId().ToString();
+            }
+            if (repoObject.createdDate == DateTime.MinValue)   // user can send in a creation date, else we insert now()
+            {
+                repoObject.createdDate = DateTime.Now;
+            }
+
             await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
         }
@@ -72,7 +81,7 @@ namespace CCA.Services.RepositoryNook.Services
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(_id));      // FIND with filter  filter("_id" = ObjectId(_id) ) - IS AN ASYNC CALL 
+            var filter = Builders<Repository>.Filter.Eq("_id", _id);      // FIND with filter  filter("_id" = ObjectId(_id) ) - IS AN ASYNC CALL 
             var fluentFindInterface = repositoryCollection.Find(filter);
 
             Repository foundObject = await fluentFindInterface.SingleOrDefaultAsync().ConfigureAwait(false);
@@ -121,7 +130,7 @@ namespace CCA.Services.RepositoryNook.Services
             }
             return found;
         }
-        public async Task Update(string _id, string repository, string collection, Repository repoObject)
+        public async Task Update(string repository, string collection, Repository repoObject)
         {
 
             if (repoObject.validate)
@@ -131,27 +140,30 @@ namespace CCA.Services.RepositoryNook.Services
 
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var filter = Builders<Repository>.Filter.Eq("_id", new ObjectId(_id));
-            repoObject._id = new ObjectId(_id);   // object-ize the GUID string
-
-            if (repoObject.modifiedDate is null)
+            if (repoObject.modifiedDate is null) // if not user supplied, we put in the modified date
             {
                 repoObject.modifiedDate = DateTime.Now;
             }
-            var replaceOneResult = await repositoryCollection.ReplaceOneAsync(filter, repoObject, new UpdateOptions { IsUpsert = true });
 
-            if (replaceOneResult.ModifiedCount == 0)
+
+            var filter = Builders<Repository>.Filter.Eq("_id", repoObject._id);
+
+            try
             {
-                throw new RepoSvcDocumentNotFoundException($"DocumentId: {_id}");
+                await repositoryCollection.ReplaceOneAsync(filter, repoObject, new UpdateOptions { IsUpsert = true });
+            }
+            catch
+            {
+                throw new RepoSvcDocumentNotFoundException($"DocumentId: {repoObject._id}");
             }
 
         }
 
-        public async Task Delete(string _id, string repository, string collection)
+        public async Task Delete(string repository, string collection, string _id)
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var filter = Builders<Repository>.Filter.Eq("_id", ObjectId.Parse(_id));
+            var filter = Builders<Repository>.Filter.Eq("_id", _id);
             var result = await repositoryCollection.DeleteOneAsync(filter);
 
             if (result.DeletedCount != 1)

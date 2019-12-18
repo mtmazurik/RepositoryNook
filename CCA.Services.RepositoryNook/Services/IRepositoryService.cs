@@ -13,7 +13,7 @@ namespace CCA.Services.RepositoryNook.Services
         List<Repository> ReadAll(string repository, string collection);
         List<Repository> QueryByKey(string repository, string collection, string key);
         List<Repository> QueryByTag(string repository, string collection, string tag);
-        Task Update(string _id, string repository, string collection, Repository repoObject);
-        Task Delete(string _id, string repository, string collection);
+        Task Update(string repository, string collection, Repository repoObject);
+        Task Delete(string repository, string collection, string _id);
     }
 }
