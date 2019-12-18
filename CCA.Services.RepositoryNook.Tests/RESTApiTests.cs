@@ -27,11 +27,8 @@ namespace CCA.Services.RepositoryNook.Tests
         private static Repository PopulateRepositoryObject(int i)
         {
             Repository repo = new Repository();
-            repo.keyName = "flightNumber";
-            repo.keyValue = $"{i}";
-            repo.tags =  new [] { new models.NameValuePair { Name= "planeType", Value= "777x" }, 
-                                                    new models.NameValuePair { Name="manufacturer", Value="Boeing"}
-                                                    } ;
+            repo.key = "flightNumber" + i;
+            repo.tags =  new string[2]{"planeType:777x","manufacturer:Boeing"};
             repo.createdBy = "RestApiTests";
             repo.app = "FlightBook";
             repo.validate = false;

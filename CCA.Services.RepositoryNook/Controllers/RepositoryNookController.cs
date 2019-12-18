@@ -67,26 +67,26 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{database}/{collection}/{_id}")]   // GET Repository object-by-id (Query by Id)
-        [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
-        {
-            try
-            {
-                Repository found = await repositoryService.Read(_id, database, collection);
+        //[HttpGet("{database}/{collection}/{_id}")]   // GET Repository object-by-id (Query by Id)      application should care about query by key or tag (not id) Delete by ID only
+        //[SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(500)]
+        //public async Task<IActionResult> GetRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string _id)
+        //{
+        //    try
+        //    {
+        //        Repository found = await repositoryService.Read(_id, database, collection);
 
-                return ResponseFormatter.ResponseOK(found);
-            }
-            catch (Exception exc)
-            {
-                return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
-            }
+        //        return ResponseFormatter.ResponseOK(found);
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        return ResponseFormatter.ResponseBadRequest(exc, "Read failed.");
+        //    }
 
-        }
-        [HttpGet("{database}/{collection}/repository")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
+        //}
+        [HttpGet("{database}/{collection}")]   // GET All Repository objects (Query by "*" wildcard operation, or default: all records API call)
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -105,35 +105,46 @@ namespace CCA.Services.RepositoryNook.Controllers
             }
 
         }
-        [HttpGet("{database}/{collection}/key")]   // query by keyName = keyValue
+        // GET query by key
+        [HttpGet("{database}/{collection}/{key}")]   
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> QueryByKeyRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string keyName, string keyValue)
+        public async Task<IActionResult> QueryByKeyRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string key)
         {
             try
             {
-                List<Repository> found = repositoryService.QueryByKey(database, collection, keyName, keyValue);
+                List<Repository> found = repositoryService.QueryByKey(database, collection, key);
+
+                if( found.Count == 0)
+                {
+                    return ResponseFormatter.ResponseNotFound(string.Format("check query string argument key={0}",key));
+                }
 
                 return ResponseFormatter.ResponseOK(found);
             }
             catch (Exception exc)
             {
-                return ResponseFormatter.ResponseBadRequest(exc, "Query failed.");
+                return ResponseFormatter.ResponseBadRequest(exc, "Query exception.");
             }
 
         }
-        [HttpGet("{database}/{collection}/tag")]   // query by tagName = tagValue
+        [HttpGet("{database}/{collection}/tag/{tag}")]   // query by tagName = tagValue
         [SwaggerResponse((int)HttpStatusCode.OK, typeof(Response))]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> QueryByTagRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string tagName, string tagValue)
+        public async Task<IActionResult> QueryByTagRepositoryObject([FromServices]IRepositoryService repositoryService, string database, string collection, string tag)
         {
             try
             {
-                List<Repository> found = repositoryService.QueryByTag(database, collection, tagName, tagValue);
+                List<Repository> found = repositoryService.QueryByTag(database, collection, tag);
+
+                if (found.Count == 0)
+                {
+                    return ResponseFormatter.ResponseNotFound(string.Format("check query string argument tag={0}", tag));
+                }
 
                 return ResponseFormatter.ResponseOK(found);
             }

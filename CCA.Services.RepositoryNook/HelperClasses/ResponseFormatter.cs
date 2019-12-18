@@ -41,6 +41,16 @@ namespace CCA.Services.RepositoryNook.HelperClasses
             };
             return result;
         }
+        public static JsonResult ResponseNotFound(string descr = "Failed")
+        {
+            Response response = new Response();
+            response.Meta.Add("Message", descr);
+            JsonResult result = new JsonResult(response)
+            {
+                StatusCode = 404
+            };
+            return result;
+        }
         public static JsonResult ResponseBadRequest(object theObject, string descr = "Failed")
         {
             Response response = new Response(theObject);

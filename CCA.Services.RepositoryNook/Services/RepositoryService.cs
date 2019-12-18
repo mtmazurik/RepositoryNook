@@ -57,16 +57,12 @@ namespace CCA.Services.RepositoryNook.Services
 
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
-            {
-                repoObject._id = ObjectId.GenerateNewId();
-            }
             if (repoObject.createdDate == DateTime.MinValue)   // user can send in a creation date, else we insert now()
             {
                 repoObject.createdDate = DateTime.Now;
             }
 
-            CreateRepositoryTextIndices(repositoryCollection);
+            //CreateRepositoryTextIndices(repositoryCollection);   enable auto-indexing feature after re-doing the separation of the key/value pairs for "key" and "tags"
 
             await repositoryCollection.InsertOneAsync(repoObject);
             return repoObject;
@@ -99,29 +95,29 @@ namespace CCA.Services.RepositoryNook.Services
             }
             return found;
         }
-        public List<Repository> QueryByKey(string repository, string collection, string keyName, string keyValue)
+        public List<Repository> QueryByKey(string repository, string collection, string key)
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var found = repositoryCollection.Find(r => r.keyName == keyName && r.keyValue == keyValue).ToList();          // FIND keyName (req) and keyValue (req) - NOT AN ASYNC CALL
+            var found = repositoryCollection.Find(r => r.key == key).ToList();          // FIND keyName (req) and keyValue (req) - NOT AN ASYNC CALL
 
             if (found is null)
             {
-                throw new RepoSvcDocumentNotFoundException($"keyName: {keyName}, keyValue: {keyValue}");
+                throw new RepoSvcDocumentNotFoundException($"key:{key}");
             }
             return found;
         }
-        public List<Repository> QueryByTag(string repository, string collection, string tagName, string tagValue)
+        public List<Repository> QueryByTag(string repository, string collection, string tag)
         {
             IMongoCollection<Repository> repositoryCollection = ConnectToCollection(repository, collection);
 
-            var builder = Builders<Repository>.Filter.ElemMatch(t => t.tags, x => x.Name == tagName && x.Value == tagValue);  // FIND tagName (req) and tagValue (req) - NOT AN ASYNC CALL
+            var builder = Builders<Repository>.Filter.AnyEq("tags", tag);
 
             var found = repositoryCollection.Find(builder).ToList();
 
             if (found is null)
             {
-                throw new RepoSvcDocumentNotFoundException($"tagName: {tagName}, tagValue: {tagValue}");
+                throw new RepoSvcDocumentNotFoundException($"tag: {tag}");
             }
             return found;
         }
@@ -217,23 +213,23 @@ namespace CCA.Services.RepositoryNook.Services
             return database;
         }
 
-        private void CreateRepositoryTextIndices(IMongoCollection<Repository> collection)   // indempotent; a no-op if index already exists.
-        {
-            // text search field     .Text()   is the keyValue
-            var textKey = Builders<Repository>.IndexKeys.Text(t => t.keyValue);             // the key value, is collections text search field, and is highly queryable
-            var options = new CreateIndexOptions() { Name = "IX_keyValue}" };
-            collection.Indexes.CreateOne(textKey, options);
+        //private void CreateRepositoryTextIndices(IMongoCollection<Repository> collection)   // indempotent; a no-op if index already exists.
+        //{
+        //    // text search field     .Text()   is the keyValue
+        //    var textKey = Builders<Repository>.IndexKeys.Text(t => t.keyValue);             // the key value, is collections text search field, and is highly queryable
+        //    var options = new CreateIndexOptions() { Name = "IX_keyValue}" };
+        //    collection.Indexes.CreateOne(textKey, options);
 
-            // another indexed field   is the  keyName
-            var indexKey = Builders<Repository>.IndexKeys.Ascending(i => i.keyName);        // the key name, is text and is indexed for speedier queries
-            var ix_options = new CreateIndexOptions() { Name = "IX_keyName}" };
-            collection.Indexes.CreateOne(indexKey, ix_options);
+        //    // another indexed field   is the  keyName
+        //    var indexKey = Builders<Repository>.IndexKeys.Ascending(i => i.keyName);        // the key name, is text and is indexed for speedier queries
+        //    var ix_options = new CreateIndexOptions() { Name = "IX_keyName}" };
+        //    collection.Indexes.CreateOne(indexKey, ix_options);
 
-            // finally the tags are madesearchable
-            var tagsKey = Builders<Repository>.IndexKeys.Ascending(t => t.tags);            // the tags array
-            var tags_ix_options = new CreateIndexOptions() { Name = "IX_tags}" };
-            collection.Indexes.CreateOne(tagsKey, tags_ix_options);
-        }         
+        //    // finally the tags are madesearchable
+        //    var tagsKey = Builders<Repository>.IndexKeys.Ascending(t => t.tags);            // the tags array
+        //    var tags_ix_options = new CreateIndexOptions() { Name = "IX_tags}" };
+        //    collection.Indexes.CreateOne(tagsKey, tags_ix_options);
+        //}         
 
         private bool CheckIfCollectionExists(IMongoDatabase database, string collectionName)
         {

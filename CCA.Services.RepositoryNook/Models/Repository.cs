@@ -7,19 +7,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CCA.Services.RepositoryNook.Models
 {
-
+    [BsonIgnoreExtraElements]
     public class Repository
     {
         [BsonRequired]
         [BsonElement("_id")]
         public object _id { get; set; }
         [BsonRequired]
-        [BsonElement("keyName")]
-        public string keyName { get; set; }
-        [BsonElement("keyValue")]
-        public string keyValue { get; set; }
+        [BsonElement("key")]
+        public string key { get; set; }
         [BsonElement("tags")]
-        public IEnumerable<NameValuePair> tags { get; set; }
+        public IEnumerable<string> tags { get; set; }
         [BsonElement("createdDate")]
         public DateTime createdDate { get; set; }
         [BsonElement("createdBy")]
