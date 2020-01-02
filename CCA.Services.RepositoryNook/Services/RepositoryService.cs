@@ -62,7 +62,7 @@ namespace CCA.Services.RepositoryNook.Services
                 repoObject.createdDate = DateTime.Now;
             }
 
-            //CreateRepositoryTextIndices(repositoryCollection);   enable auto-indexing feature after re-doing the separation of the key/value pairs for "key" and "tags"
+            CreateRepositoryTextIndices(repositoryCollection);   //enable auto-indexing feature after re-doing the separation of the key/value pairs for "key" and "tags"
 
             if (repoObject._id == null)                         // user can send in a unique identifier, else we generate a mongo ObjectId (mongo unique id)
             {
@@ -225,23 +225,20 @@ namespace CCA.Services.RepositoryNook.Services
             return database;
         }
 
-        //private void CreateRepositoryTextIndices(IMongoCollection<Repository> collection)   // indempotent; a no-op if index already exists.
-        //{
-        //    // text search field     .Text()   is the keyValue
-        //    var textKey = Builders<Repository>.IndexKeys.Text(t => t.keyValue);             // the key value, is collections text search field, and is highly queryable
-        //    var options = new CreateIndexOptions() { Name = "IX_keyValue}" };
-        //    collection.Indexes.CreateOne(textKey, options);
+        [Obsolete]
+        private void CreateRepositoryTextIndices(IMongoCollection<Repository> collection)   // indempotent; a no-op if index already exists.
+        {
+            // index: key (primary) 
+            var textKey = Builders<Repository>.IndexKeys.Text(t => t.key);             // the key value, is collections text search field, and is highly queryable
+            var options = new CreateIndexOptions() { Name = "IX_key}" };               // (name:value pairs string), NOT unique
+            collection.Indexes.CreateOne(textKey, options);                            // does not create it, if exists
 
-        //    // another indexed field   is the  keyName
-        //    var indexKey = Builders<Repository>.IndexKeys.Ascending(i => i.keyName);        // the key name, is text and is indexed for speedier queries
-        //    var ix_options = new CreateIndexOptions() { Name = "IX_keyName}" };
-        //    collection.Indexes.CreateOne(indexKey, ix_options);
 
-        //    // finally the tags are madesearchable
-        //    var tagsKey = Builders<Repository>.IndexKeys.Ascending(t => t.tags);            // the tags array
-        //    var tags_ix_options = new CreateIndexOptions() { Name = "IX_tags}" };
-        //    collection.Indexes.CreateOne(tagsKey, tags_ix_options);
-        //}         
+            // index: for tags
+            var tagIndices = Builders<Repository>.IndexKeys.Ascending(t => t.tags);    // the tags array (name:value pairs strings)
+            var tags_ix_options = new CreateIndexOptions() { Name = "IX_tags}" };
+            collection.Indexes.CreateOne(tagIndices, tags_ix_options);
+        }
 
         private bool CheckIfCollectionExists(IMongoDatabase database, string collectionName)
         {

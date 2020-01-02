@@ -12,6 +12,7 @@ using CCA.Services.RepositoryNook.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using CCA.Services.RepositoryNook.Services;
 using CCA.Services.RepositoryNook.HelperClasses;
+using OpenApi = Swashbuckle.AspNetCore.Swagger;
 
 namespace CCA.Services.RepositoryNook
 {
@@ -80,7 +81,7 @@ namespace CCA.Services.RepositoryNook
             services.AddSwaggerGen(options =>                                               // swagger - autodocument setup
             {
                 options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new OpenApi.Info
                 {
                     Title = "RepositoryNook Service",
                     Version = "v1",
