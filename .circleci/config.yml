@@ -1,22 +1,25 @@
 version: 2.1
 orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.1
+jobs:
+  auth-logon-gcp:
+    docker:
+      -image: google/cloud-sdk
+    steps:
+      - run: |
+          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
 workflows:
   version: 2
   build_and_push_image:
     jobs:
-      deploy:
-        docker:
-            -image: google/cloud-sdk
-        steps:
-            - run: |
-                echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-                gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-                gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+      - auth-logon-gcp
       - gcp-gcr/build-and-push-image:
             context: myContext
             image: gcr.io/repositorynookproject-263716/reponook-ui:latest
             registry-url: us.gcr.io
+
 
 # these circleci commands (below) will build the .net, but above we're letting the dockerfile do it 
 #jobs:
