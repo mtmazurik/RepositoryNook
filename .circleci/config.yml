@@ -3,8 +3,8 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.6.1
 workflows:
   build_and_push_image:
-  jobs:
-    - gcp-gcr/build-and-push-image:
+    jobs:
+      - gcp-gcr/build-and-push-image:
         context: myContext
         image: gcr.io/repositorynookproject-263716/reponook-ui:latest
         registry-url: us.gcr.io
