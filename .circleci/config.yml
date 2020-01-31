@@ -13,10 +13,10 @@ jobs:
           name: Build
           command: dotnet build -c Release
           working_directory: CCA.Services.RepositoryNook
-      - run:
-          name: Running Tests
-          command: dotnet test
-          working_directory: CCA.Services.RepositoryNook.Tests
+#      - run:
+#          name: Running Tests
+#          command: dotnet test
+#          working_directory: CCA.Services.RepositoryNook.Tests
       - setup_remote_docker:
           docker_layer_caching: false
       - run:
