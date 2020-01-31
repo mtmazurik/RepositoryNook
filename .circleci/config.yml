@@ -5,6 +5,14 @@ workflows:
   version: 2
   build_and_push_image:
     jobs:
+      deploy:
+        docker:
+            -image: google/cloud-sdk
+        steps:
+            - run: |
+                echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+                gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+                gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
       - gcp-gcr/build-and-push-image:
             context: myContext
             image: gcr.io/repositorynookproject-263716/reponook-ui:latest
