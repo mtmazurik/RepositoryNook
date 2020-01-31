@@ -8,6 +8,7 @@ workflows:
         context: myContext
         image: gcr.io/repositorynookproject-263716/reponook-ui:latest
         registry-url: us.gcr.io
+
 # these circleci commands (below) will build the .net, but above we're letting the dockerfile do it 
 #jobs:
 #  build:
