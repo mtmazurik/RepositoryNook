@@ -4,7 +4,7 @@ orbs:
 jobs:
   auth-logon-gcp:
     docker:
-      -image: google/cloud-sdk
+      - image: google/cloud-sdk
     steps:
       - run: |
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
