@@ -5,7 +5,7 @@ jobs:
     steps:
         - checkout
         - run: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
-        - run: docker build -f Dockerfile --rm=false -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest ./dir
+        - run: docker build -f Dockerfile --rm=false -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest .
         - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
         - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
         - run: gcloud docker --push cr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
