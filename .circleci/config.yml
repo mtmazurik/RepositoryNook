@@ -16,7 +16,7 @@ commands:
 
 jobs:
   build:
-    description: "Push image to GCR"
+    description: "Push image to GCR."
     machine: true
     steps:
         - checkout
