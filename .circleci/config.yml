@@ -4,8 +4,10 @@ jobs:
     machine: true
     steps:
         - checkout
+        - setup_remote_docker:
+            docker_layer_caching: false
         - run: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
-        - run: docker build --rm=false -f Dockerfile -t gcr.io/repositorynookproject-263716/reponook-ui:latest ../CCA.Services.RepositoryNook
+        - run: docker build --rm=false -t gcr.io/repositorynookproject-263716/reponook-ui:latest .
         - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
         - run: gcloud --quiet config set project repositorynookproject-263716
         - run: gcloud docker --push cr.io/repositorynookproject-263716/reponook-ui:latest
