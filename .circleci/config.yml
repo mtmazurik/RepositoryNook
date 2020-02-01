@@ -27,9 +27,9 @@ workflows:
   version: 2
   install_and_configure_cli:
     jobs:
-        - gcp-cli/install_and_initialize_cli:
+        - gcloud/install_and_initialize_cli:
             context: myContext
-            executor: gcp-cli/default
+            executor: gcloud/default
   build-master:
     jobs:
         - build
