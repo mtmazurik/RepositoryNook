@@ -11,6 +11,6 @@ jobs:
         - run: gcloud docker --push cr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
 workflowsw:
   version: 2
-    build-master:
-        jobs:
-            - build
+  build-master:
+    jobs:
+        - build
