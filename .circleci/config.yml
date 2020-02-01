@@ -10,7 +10,7 @@ jobs:
         - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
         - run: gcloud docker --push cr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
 workflowsw:
-    version: 2
+  version: 2
     build-master:
         jobs:
             - build
