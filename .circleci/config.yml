@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  push-image:
+  build:
     machine: true
     steps:
         - checkout
@@ -13,4 +13,4 @@ workflowsw:
     version: 2
     build-master:
         jobs:
-            - push-image
+            - build
