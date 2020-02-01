@@ -1,50 +1,11 @@
 version: 2.1
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.6.1
 jobs:
-  auth-logon-gcp:
-    docker:
-      - image: google/cloud-sdk
+  push-image:
+    machine: true
     steps:
-      - run: |
-          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-workflows:
-  version: 2
-  build_and_push_image:
-    jobs:
-      - auth-logon-gcp
-      - gcp-gcr/build-and-push-image:
-            context: myContext
-            image: gcr.io/repositorynookproject-263716/reponook-ui:latest
-            registry-url: us.gcr.io
-
-
-# these circleci commands (below) will build the .net, but above we're letting the dockerfile do it 
-#jobs:
-#  build:
-#    docker:
-#      - image: jetcipher/circleci-dotnet-core:3.0
-#    steps:
-#      - checkout
-#      - run:
-#          name: Restore
-#          command: dotnet restore
-#          working_directory: CCA.Services.RepositoryNook
-#      - run:
-#          name: Build
-#          command: dotnet build -c Release
-#          working_directory: CCA.Services.RepositoryNook
-#      - run:
-#          name: Running Tests
-#          command: dotnet test
-#          working_directory: CCA.Services.RepositoryNook.Tests
-#      - setup_remote_docker:
-#          docker_layer_caching: false
-#      - run:
-#          name: Build and push Docker image
-#          command: |
-#            docker build -t gcr.io/repositorynookproject-263716/reponook-ui:latest .
-#            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-#            docker push gcr.io/repositorynookproject-263716/reponook-ui:latest
+        - checkout
+        - run: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
+        - run: docker build --rm=false -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest .
+        - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+        - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+        - run: gcloud docker --push cr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
