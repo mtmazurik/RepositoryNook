@@ -1,1 +1,32 @@
-#config.yml
+version: 2.1
+orbs:
+  gcloud: circleci/gcp-cli@1.8.3
+  gcr: circleci/gcp-gcr@0.6.1
+
+commands:
+  install:
+    description: "Install 'gcloud' if not already installed."
+    steps:
+        - gcloud/install
+
+  init:
+    description: "Intialize the 'gcloud' CLI."
+    steps:
+        - gcloud/initialize
+
+jobs:
+  build:
+    description: "Push image to GCR."
+    machine: true
+    steps:
+        - checkout
+        - run: echo ${GOOGLE_AUTH} > ${HOME}/gcp-key.json
+        - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/repositorynookproject-263716/reponook-ui:latest .
+        - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+        - run: gcloud --quiet config set project repositorynookproject-263716
+        - run: gcloud docker --push cr.io/repositorynookproject-263716/reponook-ui:latest
+workflows:
+  version: 2
+  build-master:
+    jobs:
+        - build

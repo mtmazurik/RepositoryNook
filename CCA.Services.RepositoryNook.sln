@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7631C5BC-B886-4703-82EF-85269AB4C4AA}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		config.yml = config.yml
 		readme.md = readme.md
 	EndProjectSection
 EndProject
@@ -29,11 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azure", "Azure", "{1EF72A7B
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCA.Services.RepositoryNook.Tests", "CCA.Services.RepositoryNook.Tests\CCA.Services.RepositoryNook.Tests.csproj", "{6D3E8115-66FC-4EF1-9B55-32E7BD012DC5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "circleci", "circleci", "{8558921C-C458-4A44-9C83-15A7134F75D3}"
-	ProjectSection(SolutionItems) = preProject
-		.circleci\config.yml = .circleci\config.yml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,7 +56,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8FA679D9-F47E-4CD6-824C-4EE078E43D0F} = {7631C5BC-B886-4703-82EF-85269AB4C4AA}
 		{1EF72A7B-9CA8-4513-9287-927EC4F39DCA} = {7631C5BC-B886-4703-82EF-85269AB4C4AA}
-		{8558921C-C458-4A44-9C83-15A7134F75D3} = {7631C5BC-B886-4703-82EF-85269AB4C4AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D53D694-24EE-433B-897E-C6FE3F8F8FEC}
