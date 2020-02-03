@@ -23,7 +23,7 @@ jobs:
         - checkout
         - install
         - init
-        ##- run: gcloud auth activate-service-account --key-file=${HOME}/gcp-key.json
+        ## - run: gcloud auth activate-service-account --key-file=${HOME}/gcp-key.json
         - run: docker login -u _json_key --password-stdin https://gcr.io < ${HOME}/gcp-key.json
         - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest ./CCA.Services.RepositoryNook
         - run: docker push gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
