@@ -19,8 +19,10 @@ jobs:
     description: "Push image to GCR."
     machine: true
     steps:
-        - checkout
         - run: echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
+        - checkout
+        - install
+        - init
         - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest ./CCA.Services.RepositoryNook
         - run: docker push gcr.io/${GOOGLE_PROJECT_ID}/reponook-ui:latest
 workflows:
