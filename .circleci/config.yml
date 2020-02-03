@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   gcloud: circleci/gcp-cli@1.8.3
-  gcr: circleci/gcp-gcr@0.6.1
 
 commands:
   install:
@@ -16,24 +15,18 @@ commands:
 
 jobs:
   build:
-    description: "Push image to GCR."
+    description: "Build & Push image to GCR repository"
     machine: true
     steps:
-        - run: echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
         - checkout
+        - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-svc:latest ./CCA.Services.RepositoryNook
+        - run: echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
         - install
         - init
-        ## - run: gcloud auth activate-service-account --key-file=${HOME}/gcp-key.json
         - run: docker login -u _json_key --password-stdin https://gcr.io < ${HOME}/gcp-key.json
-        - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-svc:latest ./CCA.Services.RepositoryNook
         - run: docker push gcr.io/${GOOGLE_PROJECT_ID}/reponook-svc:latest
 workflows:
   version: 2
-#  install_and_configure_cli:
-#    jobs:
-#        - gcloud/install_and_initialize_cli:
-#           context: myContext
-#            executor: gcloud/default
   build-master:
     jobs:
         - build
