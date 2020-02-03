@@ -1,17 +1,4 @@
 version: 2.1
-orbs:
-  gcloud: circleci/gcp-cli@1.8.3
-
-commands:
-  install:
-    description: "Install 'gcloud' if not already installed."
-    steps:
-        - gcloud/install
-
-  init:
-    description: "Intialize the 'gcloud' CLI."
-    steps:
-        - gcloud/initialize
 
 jobs:
   build:
@@ -21,8 +8,6 @@ jobs:
         - checkout
         - run: docker build --rm=false -f ./CCA.Services.RepositoryNook/Dockerfile -t gcr.io/${GOOGLE_PROJECT_ID}/reponook-svc:latest ./CCA.Services.RepositoryNook
         - run: echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcp-key.json
-        - install
-        - init
         - run: docker login -u _json_key --password-stdin https://gcr.io < ${HOME}/gcp-key.json
         - run: docker push gcr.io/${GOOGLE_PROJECT_ID}/reponook-svc:latest
 workflows:
