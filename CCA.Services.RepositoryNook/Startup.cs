@@ -18,7 +18,7 @@ namespace CCA.Services.RepositoryNook
 {
     public class Startup
     {
-        private ILoggerFactory _loggerFactory;                                              // leverage built in ASPNetCore logging 
+        private ILoggerFactory _loggerFactory;             // leverage built in ASPNetCore logging 
         private ILogger<Startup> _logger;
         private IConfigurationRoot _configuration { get; }
 
