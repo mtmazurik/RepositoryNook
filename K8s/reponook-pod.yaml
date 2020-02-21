@@ -7,4 +7,4 @@ spec:
   - name: reponook-pod
     image: docker.io/mtmazurik/repositorynook:dev
     ports:
-    - containerPort: 8192
+    - containerPort: 80

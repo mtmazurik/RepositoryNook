@@ -38,6 +38,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "K8s", "K8s", "{79B0A3AB-679D-4926-B2E6-A4AB36128309}"
 	ProjectSection(SolutionItems) = preProject
 		K8s\reponook-pod.yaml = K8s\reponook-pod.yaml
+		K8s\reponook-svc.yaml = K8s\reponook-svc.yaml
 	EndProjectSection
 EndProject
 Global
