@@ -1,10 +1,17 @@
 apiVersion: v1
-kind: Pod
+kind: Deployment
 metadata:
-  name: reponook-pod
+  name: reponook
 spec:
-  containers:
-  - name: reponook-pod
-    image: docker.io/mtmazurik/repositorynook:dev
-    ports:
-    - containerPort: 80
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: reponook
+    spec:
+      containers:
+      - name: reponook-pod
+        image: docker.io/mtmazurik/repositorynook:dev
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
