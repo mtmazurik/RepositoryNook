@@ -3,7 +3,10 @@ kind: Deployment
 metadata:
   name: reponook
 spec:
-  replicas: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reponook
   template:
     metadata:
       labels:
