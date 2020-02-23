@@ -6,11 +6,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      run: reponook
+      app: reponook
   template:
     metadata:
       labels:
-        run: reponook
+        app: reponook
     spec:
       containers:
       - name: reponook-pod
