@@ -5,9 +5,11 @@ metadata:
   labels: 
     run: reponook
 spec:
+  type: LoadBalancer
   ports:
-  - port: 80
+  - port: 8192
+    targetPort: 80
     protocol: TCP
+    name: http
   selector:
     run: reponook
-  type: LoadBalancer
