@@ -18,4 +18,3 @@ spec:
         imagePullPolicy: Always
         ports:
           - containerPort: 80
-# Marty Mazurik 2/22/2020
